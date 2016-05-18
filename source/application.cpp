@@ -243,7 +243,7 @@ application::before_render() {
 
 void
 application::after_render() {
-    renderer_->present();
+	renderer_->present();
 	
 	frame_count_++;
 	frames_per_second_ = static_cast<::Uint32>(
