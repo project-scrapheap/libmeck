@@ -135,8 +135,8 @@ namespace meck {
  * The application is responsible for generating events for
  * the active controller.
  */
-class application :
-	private boost::noncopyable
+class application
+	: private boost::noncopyable
 {
 public:
 	explicit
@@ -225,23 +225,37 @@ public:
 		controller_ptr ctrlr
 	);
 	
-	window_ptr
+	window&
 	get_window() {
-		return window_;
+		RUNTIME_ASSERT(window_.get());
+		return *window_;
 	}
 	
-	renderer_ptr
+	renderer&
 	get_renderer() {
-		return renderer_;
+		RUNTIME_ASSERT(renderer_.get());
+		return *renderer_;
 	}
 	
-	const window_ptr
+	const window&
 	get_window() const {
+		RUNTIME_ASSERT(window_.get());
+		return *window_;
+	}
+	
+	const renderer&
+	get_renderer() const {
+		RUNTIME_ASSERT(renderer_.get());
+		return *renderer_;
+	}
+	
+	window_ptr&
+	get_window_ptr() {
 		return window_;
 	}
 	
-	const renderer_ptr
-	get_renderer() const {
+	renderer_ptr&
+	get_renderer_ptr() {
 		return renderer_;
 	}
 	
@@ -313,7 +327,15 @@ run(
  */
 inline boost::program_options::options_description
 default_program_options() {
+	using boost::filesystem::path;
+	using boost::filesystem::current_path;
+	
 	boost::program_options::options_description opt_desc;
+	
+	const path dir_path(current_path());
+	
+	const path base_path_val(dir_path);
+	const path resource_path_val(dir_path / "resource");
 	
 	opt_desc.add_options()
 		("help",
@@ -324,8 +346,12 @@ default_program_options() {
 			"set the random generator seed")
 		("base-path",
 			boost::program_options::value<std::string>()
-				->default_value(boost::filesystem::current_path().string()),
+				->default_value(base_path_val.string()),
 			"set the base directory path")
+		("resource-path",
+			boost::program_options::value<std::string>()
+				->default_value(resource_path_val.string()),
+			"set the resource directory path")
 	;
 	
 	return opt_desc;

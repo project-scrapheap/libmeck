@@ -82,8 +82,8 @@ namespace meck {
 class renderer;
 class surface;
 
-class texture :
-	private boost::noncopyable
+class texture
+	: private boost::noncopyable
 {
 public:
 	class lock_guard :
@@ -96,10 +96,10 @@ public:
 		lock_guard(
 			mutex_type& m,
 			boost::optional<rect> r = boost::none
-		) :
-			m_(m),
-			pixels_(nullptr),
-			pitch_(0)
+		)
+			: m_(m)
+			, pixels_(nullptr)
+			, pitch_(0)
 		{
 			m_.lock(&pixels_, &pitch_, r);
 		}
@@ -135,8 +135,8 @@ public:
 	explicit
 	texture(
 		::SDL_Texture* txtr
-	) noexcept:
-		texture_(txtr)
+	) noexcept
+		: texture_(txtr)
 	{}
 	
 	texture(
@@ -164,8 +164,8 @@ public:
 	
 	texture(
 		texture&& rhs
-	) noexcept:
-		texture_(rhs.texture_)
+	) noexcept
+		: texture_(rhs.texture_)
 	{
 		rhs.texture_ = nullptr;
 	}

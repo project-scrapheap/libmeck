@@ -5,6 +5,11 @@ Origin: https://bitbucket.org/erikedlund/libmeck
 
 Mirror: https://github.com/edlund/libmeck
 
+## Warning
+
+This is a work in progress. Things can and will change, consider
+the API experimental and volatile.
+
 ## Overview
 
 `libmeck` is a game development library based on `SDL2`, `SDL-TTF`,

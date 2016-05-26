@@ -78,8 +78,8 @@
 
 namespace meck {
 
-class window :
-	private boost::noncopyable
+class window
+	: private boost::noncopyable
 {
 public:
 	explicit

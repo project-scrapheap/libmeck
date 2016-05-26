@@ -81,10 +81,36 @@
 
 namespace meck {
 
-class renderer :
-	private boost::noncopyable
+class renderer
+	: private boost::noncopyable
 {
 public:
+	class clip_guard
+		: private boost::noncopyable
+	{
+	public:
+		explicit
+		clip_guard(
+			renderer& rndr,
+			const rect& clipr
+		)
+			: renderer_(rndr)
+			, clip_(renderer_.get_clip_rect())
+		{
+			renderer_.set_clip_rect(clipr);
+		}
+	
+		~clip_guard() noexcept {
+			renderer_.set_clip_rect(clip_);
+		}
+	
+	private:
+		renderer& renderer_;
+		boost::optional<rect> clip_;
+	};
+	
+	typedef clip_guard clip_guard_type;
+	
 	explicit
 	renderer(
 		::SDL_Renderer* rndr
@@ -96,12 +122,12 @@ public:
 		window& win,
 		const int index,
 		const ::Uint32 flags
-	) :
-		renderer_(::SDL_CreateRenderer(
-			win.get(),
-			index,
-			flags
-		))
+	)
+		: renderer_(::SDL_CreateRenderer(
+				win.get(),
+				index,
+				flags
+			))
 	{
 		if (!renderer_)
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
@@ -114,8 +140,8 @@ public:
 	
 	renderer(
 		renderer&& rhs
-	) noexcept:
-		renderer_(rhs.renderer_)
+	) noexcept
+		: renderer_(rhs.renderer_)
 	{
 		rhs.renderer_ = nullptr;
 	}
@@ -243,6 +269,12 @@ public:
 		const point& offset = point(0, 0),
 		const int flip = 0
 	);
+	
+	renderer& set_draw_color(
+		const ::SDL_Color& color
+	) {
+		return set_draw_color(color.r, color.g, color.b, color.a);
+	}
 	
 	renderer& set_draw_color(
 		const ::Uint8 r = 0,

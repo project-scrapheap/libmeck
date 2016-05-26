@@ -75,19 +75,19 @@ class point
 public:
 	typedef int value_type;
 	
-	inline
+	inline explicit
 	point(
 		const int x = 0,
 		const int y = 0
-	) noexcept:
-		point_ {x, y}
+	) noexcept
+		: point_ {x, y}
 	{}
 	
 	inline
 	point(
 		const ::SDL_Point& rhs
-	) noexcept:
-		point(rhs.x, rhs.y)
+	) noexcept
+		: point(rhs.x, rhs.y)
 	{}
 	
 	inline

@@ -93,8 +93,8 @@ typedef std::map<std::string, ::SDL_Keycode> keycode_map;
  * key presses to appropriate controller callbacks. Modifiers
  * are currently not supported.
  */
-class keycode_dispatcher :
-	private boost::noncopyable
+class keycode_dispatcher
+	: private boost::noncopyable
 {
 public:
 	typedef boost::function<bool (

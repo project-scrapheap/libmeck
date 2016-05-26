@@ -61,27 +61,29 @@
  *  3. This notice may not be removed or altered from any source distribution.
  */
 
+#include <meck/application.hpp>
 #include <meck/controller.hpp>
 
 namespace meck {
 
 controller::controller(
 	application& app
-) :
-	app_(app),
-	keycode_dispatcher_(app)
+)
+	: app_(app)
+	, keycode_dispatcher_(app)
+	, ui_overlay_(*this)
 {
 }
 
-controller::~controller() noexcept
-{
+controller::~controller() noexcept {
 }
 
 bool
 controller::react(
 	::SDL_Event& event
 ) {
-	return keycode_dispatcher_.handle(event);
+	return keycode_dispatcher_.handle(event)? true:
+		ui_overlay_.react(event);
 }
 
 } // namespace:meck

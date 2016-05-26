@@ -81,8 +81,8 @@
 
 namespace meck {
 
-class surface :
-	private boost::noncopyable
+class surface
+	: private boost::noncopyable
 {
 public:
 	class lock_guard :
@@ -94,8 +94,8 @@ public:
 		inline explicit
 		lock_guard(
 			mutex_type& m
-		) :
-			m_(m)
+		)
+			: m_(m)
 		{
 			m_.lock();
 		}
@@ -129,15 +129,15 @@ public:
 	explicit
 	surface(
 		::SDL_Surface* srfce
-	) noexcept:
-		surface_(srfce)
+	) noexcept
+		: surface_(srfce)
 	{}
 	
 	explicit
 	surface(
 		const boost::filesystem::path& filename
-	) :
-		surface_(::IMG_Load(filename.string().c_str()))
+	)
+		: surface_(::IMG_Load(filename.string().c_str()))
 	{
 		if (!surface_)
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
@@ -153,17 +153,17 @@ public:
 		::Uint32 Gmask,
 		::Uint32 Bmask,
 		::Uint32 Amask
-	) :
-		surface_(::SDL_CreateRGBSurface(
-			flags,
-			width,
-			height,
-			depth,
-			Rmask,
-			Gmask,
-			Bmask,
-			Amask
-		))
+	)
+		: surface_(::SDL_CreateRGBSurface(
+				flags,
+				width,
+				height,
+				depth,
+				Rmask,
+				Gmask,
+				Bmask,
+				Amask
+			))
 	{
 		if (!surface_)
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
@@ -180,18 +180,18 @@ public:
 		::Uint32 Gmask,
 		::Uint32 Bmask,
 		::Uint32 Amask
-	) :
-		surface_(::SDL_CreateRGBSurfaceFrom(
-			pixels,
-			width,
-			height,
-			depth,
-			pitch,
-			Rmask,
-			Gmask,
-			Bmask,
-			Amask
-		))
+	)
+		: surface_(::SDL_CreateRGBSurfaceFrom(
+				pixels,
+				width,
+				height,
+				depth,
+				pitch,
+				Rmask,
+				Gmask,
+				Bmask,
+				Amask
+			))
 	{
 		if (!surface_)
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
@@ -205,8 +205,8 @@ public:
 	inline
 	surface(
 		surface&& rhs
-	) noexcept:
-		surface_(rhs.surface_)
+	) noexcept
+		: surface_(rhs.surface_)
 	{
 		rhs.surface_ = nullptr;
 	}

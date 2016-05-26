@@ -61,73 +61,133 @@
  *  3. This notice may not be removed or altered from any source distribution.
  */
 
-#include "test_app.hpp"
+#include <meck/application.hpp>
+#include <meck/ui/ascii_textbox.hpp>
 
-#include <meck/detail/test.hpp>
+namespace meck {
+namespace ui {
 
-namespace test {
+#define KEY_HACK_SPEC(Key, Char) \
+	case SDLK_##Key: value_.append(Char); return true; break
+#define KEY_HACK(Key) \
+	KEY_HACK_SPEC(Key, #Key)
+
+bool
+ascii_textbox::react(
+	::SDL_Event& event
+) {
+	if (test_clicked(*this, event, SDL_BUTTON_LEFT)) {
+		owner_.set_focused(*this);
+		return true;
+	} else if (event.type == SDL_KEYDOWN && owner_.is_focused(*this)) {
+		switch (event.key.keysym.sym) {
+			KEY_HACK(a);
+			KEY_HACK(b);
+			KEY_HACK(c);
+			KEY_HACK(d);
+			KEY_HACK(e);
+			KEY_HACK(f);
+			KEY_HACK(g);
+			KEY_HACK(h);
+			KEY_HACK(i);
+			KEY_HACK(j);
+			KEY_HACK(k);
+			KEY_HACK(l);
+			KEY_HACK(m);
+			KEY_HACK(n);
+			KEY_HACK(o);
+			KEY_HACK(p);
+			KEY_HACK(q);
+			KEY_HACK(r);
+			KEY_HACK(s);
+			KEY_HACK(t);
+			KEY_HACK(u);
+			KEY_HACK(v);
+			KEY_HACK(w);
+			KEY_HACK(x);
+			KEY_HACK(y);
+			KEY_HACK(z);
+
+			KEY_HACK(0);
+			KEY_HACK(1);
+			KEY_HACK(2);
+			KEY_HACK(3);
+			KEY_HACK(4);
+			KEY_HACK(5);
+			KEY_HACK(6);
+			KEY_HACK(7);
+			KEY_HACK(8);
+			KEY_HACK(9);
+
+			KEY_HACK_SPEC(SPACE, " ");
+			KEY_HACK_SPEC(PERIOD, ".");
+			KEY_HACK_SPEC(EXCLAIM, "!");
+			KEY_HACK_SPEC(QUOTE, "'");
+			KEY_HACK_SPEC(QUOTEDBL, "\"");
+			KEY_HACK_SPEC(PERCENT, "%");
+			KEY_HACK_SPEC(DOLLAR, "$");
+			KEY_HACK_SPEC(AMPERSAND, "&");
+			KEY_HACK_SPEC(LEFTPAREN, "(");
+			KEY_HACK_SPEC(RIGHTPAREN, ")");
+			KEY_HACK_SPEC(ASTERISK, "*");
+			KEY_HACK_SPEC(PLUS, "+");
+			KEY_HACK_SPEC(MINUS, "-");
+			KEY_HACK_SPEC(COMMA, ",");
+			KEY_HACK_SPEC(SLASH, "/");
+			KEY_HACK_SPEC(COLON, ":");
+			KEY_HACK_SPEC(SEMICOLON, ";");
+			KEY_HACK_SPEC(LESS, "<");
+			KEY_HACK_SPEC(EQUALS, "=");
+			KEY_HACK_SPEC(GREATER, ">");
+			KEY_HACK_SPEC(QUESTION, "?");
+			KEY_HACK_SPEC(AT, "@");
+			
+			KEY_HACK_SPEC(KP_DIVIDE, "/");
+			KEY_HACK_SPEC(KP_MULTIPLY, "*");
+			KEY_HACK_SPEC(KP_MINUS, "-");
+			KEY_HACK_SPEC(KP_PLUS, "+");
+			KEY_HACK_SPEC(KP_0, "0");
+			KEY_HACK_SPEC(KP_1, "1");
+			KEY_HACK_SPEC(KP_2, "2");
+			KEY_HACK_SPEC(KP_3, "3");
+			KEY_HACK_SPEC(KP_4, "4");
+			KEY_HACK_SPEC(KP_5, "5");
+			KEY_HACK_SPEC(KP_6, "6");
+			KEY_HACK_SPEC(KP_7, "7");
+			KEY_HACK_SPEC(KP_8, "8");
+			KEY_HACK_SPEC(KP_9, "9");
+			KEY_HACK_SPEC(KP_PERIOD, ".");
+			KEY_HACK_SPEC(KP_EQUALS, "=");
+			
+			case SDLK_BACKSPACE:
+				if (value_.size())
+					value_.pop_back();
+				return true;
+			break;
+		}
+	}
+	return false;
+}
+
+#undef KEY_HACK
+#undef KEY_HACK_SPEC
 
 void
-renderer_controller::think() {
+ascii_textbox::think() {
+	const bool focused = owner_.is_focused(*this);
+	
+	append_ = focused && static_cast<int>(
+		owner_.get_application().get_timer().total_sec()
+	) % 2 == 0? '_': ' ';
+
 }
 
 void
-renderer_controller::render() {
-	using meck::point;
-	using meck::rect;
-	
-	meck::renderer& rndr = app_.get_renderer();
-	
-	rndr.set_draw_color(255, 255, 255);
-	
-	rndr.draw_rect(10, 10, 20, 20);
-	rndr.draw_rect(30, 10, 50, 30);
-	
-	rndr.fill_rect(10, 40, 20, 50);
-	rndr.fill_rect(30, 40, 50, 60);
-	
-	for (int x_i = 60; x_i < 120; x_i += 2)
-		rndr.draw_point(x_i, 10);
-	
-	for (int y_i = 10; y_i < 70; y_i += 2)
-		rndr.draw_point(60, y_i);
-	
-	std::vector<rect> rs {
-		rect(point(100, 100), point(40, 40)),
-		rect(point(140, 140), point(80, 80)),
-	};
-	rndr.draw_rects(rs);
-	
-	rndr.copy(fox_text_, boost::none, point(70, 20));
-	rndr.copy(qmark_image_, boost::none, point(514, 314));
-	
-	rndr.set_draw_color(255, 0, 0);
-	rndr.fill_rect(100, 460, 200, 560);
-	
-	rndr.set_draw_color(0, 255, 0);
-	rndr.fill_rect(210, 460, 310, 560);
-	
-	rndr.set_draw_color(0, 0, 255);
-	rndr.fill_rect(320, 460, 420, 560);
-	
-	rndr.set_draw_color(255, 255, 255);
-	
-	rndr.draw_line(100, 570, 770, 570);
-	rndr.draw_line(770, 60, 770, 570);
-	
-	rndr.draw_line(110, 580, 780, 580);
-	rndr.draw_line(780, 70, 780, 580);
-	
-	rndr.set_draw_color(0, 0, 0);
-	
-	meck::detail::test::compare_renderer_to_file(
-		app_,
-		"test_app-data/renderer-0.bmp",
-		"test_app-data/renderer-0-screenshot.bmp"
-	);
-	
-	next_controller();
+ascii_textbox::render() {
+	block::render();
 }
 
-} // namespace:test
+
+} // namespace:ui
+} // namespace:meck
 

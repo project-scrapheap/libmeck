@@ -80,6 +80,21 @@ class renderer;
 class timer;
 class window;
 
+namespace ui {
+
+class ascii_textbox;
+class block;
+class container;
+class label;
+class overlay;
+class regex_validator;
+class theme;
+class utf8_textbox;
+class validator;
+class widget;
+
+} // namespace:ui
+
 } // namespace:meck
 
 #endif

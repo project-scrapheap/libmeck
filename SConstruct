@@ -77,7 +77,17 @@ env.StaticLibrary("meck", [
 	"source/surface.cpp",
 	"source/texture.cpp",
 	"source/typeid.cpp",
-	"source/window.cpp"
+	"source/window.cpp",
+	
+	"source/ui/ascii_textbox.cpp",
+	"source/ui/block.cpp",
+	"source/ui/container.cpp",
+	"source/ui/label.cpp",
+	"source/ui/overlay.cpp",
+	"source/ui/theme.cpp",
+	"source/ui/utf8_textbox.cpp",
+	"source/ui/validator.cpp",
+	"source/ui/widget.cpp"
 ])
 
 for pkg in packages:
@@ -88,6 +98,7 @@ env.Program("test/test_app", [
 	"test/test_app_configure.cpp",
 	"test/test_app_font.cpp",
 	"test/test_app_keycode.cpp",
-	"test/test_app_renderer.cpp"
+	"test/test_app_renderer.cpp",
+	"test/test_app_ui_block.cpp"
 ])
 

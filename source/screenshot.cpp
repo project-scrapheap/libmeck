@@ -70,10 +70,10 @@ screenshot_BMP(
 	const boost::filesystem::path& path,
 	application& app
 ) {
-	window_ptr win(app.get_window());
-	renderer_ptr rndr(app.get_renderer());
+	window& win = app.get_window();
+	renderer& rndr = app.get_renderer();
 	
-	surface srfc(win->get_window_surface());
+	surface srfc(win.get_window_surface());
 	rect clipr(srfc.get_clip_rect());
 	
 	std::unique_ptr<unsigned char[]> pixels(new unsigned char[
@@ -81,7 +81,7 @@ screenshot_BMP(
 			* srfc.get_format().BytesPerPixel
 	]);
 	
-	rndr->read_pixels(
+	rndr.read_pixels(
 		clipr,
 		srfc.get_format_format(),
 		pixels.get(),

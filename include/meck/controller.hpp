@@ -75,6 +75,8 @@
 #include <meck/reactor.hpp>
 #include <meck/typeid.hpp>
 
+#include <meck/ui/overlay.hpp>
+
 #include <SDL.h>
 
 namespace meck {
@@ -84,9 +86,9 @@ namespace meck {
  * events. Each controller queued for use by an application
  * will be used for at least one rendered frame.
  */
-class controller :
-	private boost::noncopyable,
-	public reactor
+class controller
+	: private boost::noncopyable
+	, public reactor
 {
 public:
 	explicit
@@ -116,7 +118,7 @@ public:
 	}
 	
 	virtual application&
-	get_app() {
+	get_application() {
 		return app_;
 	}
 	
@@ -125,10 +127,16 @@ public:
 		return keycode_dispatcher_;
 	}
 	
+	virtual ui::overlay&
+	get_ui_overlay() {
+		return ui_overlay_;
+	}
+	
 protected:
 	std::string name_;
 	application& app_;
 	keycode_dispatcher keycode_dispatcher_;
+	ui::overlay ui_overlay_;
 };
 
 typedef std::shared_ptr<controller> controller_ptr;

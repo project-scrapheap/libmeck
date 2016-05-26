@@ -61,73 +61,113 @@
  *  3. This notice may not be removed or altered from any source distribution.
  */
 
-#include "test_app.hpp"
+#include <meck/application.hpp>
+#include <meck/controller.hpp>
+#include <meck/ui/container.hpp>
+#include <meck/ui/overlay.hpp>
+#include <meck/ui/theme.hpp>
 
-#include <meck/detail/test.hpp>
+namespace meck {
+namespace ui {
 
-namespace test {
+overlay::overlay(
+	controller& ctrlr
+)
+	: theme_(new theme(ctrlr))
+	, controller_(ctrlr)
+	, root_(nullptr)
+	, focused_(nullptr)
+{}
 
-void
-renderer_controller::think() {
+overlay::~overlay() noexcept {
+}
+
+point
+overlay::get_size() const {
+	return controller_
+		.get_application()
+		.get_renderer()
+		.get_logical_size();
+}
+
+rect
+overlay::get_outmost_rect() const {
+	return rect(point(0, 0), get_size());
 }
 
 void
-renderer_controller::render() {
-	using meck::point;
-	using meck::rect;
-	
-	meck::renderer& rndr = app_.get_renderer();
-	
-	rndr.set_draw_color(255, 255, 255);
-	
-	rndr.draw_rect(10, 10, 20, 20);
-	rndr.draw_rect(30, 10, 50, 30);
-	
-	rndr.fill_rect(10, 40, 20, 50);
-	rndr.fill_rect(30, 40, 50, 60);
-	
-	for (int x_i = 60; x_i < 120; x_i += 2)
-		rndr.draw_point(x_i, 10);
-	
-	for (int y_i = 10; y_i < 70; y_i += 2)
-		rndr.draw_point(60, y_i);
-	
-	std::vector<rect> rs {
-		rect(point(100, 100), point(40, 40)),
-		rect(point(140, 140), point(80, 80)),
-	};
-	rndr.draw_rects(rs);
-	
-	rndr.copy(fox_text_, boost::none, point(70, 20));
-	rndr.copy(qmark_image_, boost::none, point(514, 314));
-	
-	rndr.set_draw_color(255, 0, 0);
-	rndr.fill_rect(100, 460, 200, 560);
-	
-	rndr.set_draw_color(0, 255, 0);
-	rndr.fill_rect(210, 460, 310, 560);
-	
-	rndr.set_draw_color(0, 0, 255);
-	rndr.fill_rect(320, 460, 420, 560);
-	
-	rndr.set_draw_color(255, 255, 255);
-	
-	rndr.draw_line(100, 570, 770, 570);
-	rndr.draw_line(770, 60, 770, 570);
-	
-	rndr.draw_line(110, 580, 780, 580);
-	rndr.draw_line(780, 70, 780, 580);
-	
-	rndr.set_draw_color(0, 0, 0);
-	
-	meck::detail::test::compare_renderer_to_file(
-		app_,
-		"test_app-data/renderer-0.bmp",
-		"test_app-data/renderer-0-screenshot.bmp"
-	);
-	
-	next_controller();
+overlay::set_root() {
+	root_ = nullptr;
 }
 
-} // namespace:test
+void
+overlay::set_root(
+	container& blk
+) {
+	blk.set_size(get_size());
+	blk.set_position(point(0, 0));
+	root_ = &blk;
+}
+
+void
+overlay::set_focused() {
+	focused_ = nullptr;
+}
+
+void
+overlay::set_focused(
+	widget& wdg
+) {
+	focused_ = &wdg;
+}
+
+
+bool
+overlay::is_focused(
+	const widget& wdg
+) {
+	return focused_ == &wdg;
+}
+
+bool
+overlay::react(
+	::SDL_Event& event
+) {
+	return root_? root_->react(event): false;
+}
+
+void
+overlay::think() {
+	if (root_) root_->think();
+}
+
+void
+overlay::render() {
+	if (root_) root_->render();
+}
+
+void
+overlay::setup() {
+	RUNTIME_ASSERT(root_);
+	root_->setup();
+}
+
+controller&
+overlay::get_controller() {
+	return controller_;
+}
+
+application&
+overlay::get_application() {
+	return controller_.get_application();
+}
+
+theme&
+overlay::get_theme() {
+	RUNTIME_ASSERT(theme_.get());
+	return *theme_;
+}
+
+} // namespace:ui
+} // namespace:meck
 

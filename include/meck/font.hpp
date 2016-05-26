@@ -86,23 +86,23 @@
 
 namespace meck {
 
-class font :
-	private boost::noncopyable
+class font
+	: private boost::noncopyable
 {
 public:
 	explicit
 	font(
 		::TTF_Font* f
-	) noexcept:
-		font_(f)
+	) noexcept
+		: font_(f)
 	{}
 	
 	font(
 		const boost::filesystem::path& file,
 		const int ptsize,
 		const long index = 0
-	) :
-		font_(::TTF_OpenFontIndex(
+	)
+		: font_(::TTF_OpenFontIndex(
 			file.string().c_str(),
 			ptsize,
 			index

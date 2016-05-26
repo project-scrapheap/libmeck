@@ -73,14 +73,14 @@ texture::texture(
 	const int access,
 	const int w,
 	const int h
-) :
-	texture_(::SDL_CreateTexture(
-		rndr.get(),
-		format,
-		access,
-		w,
-		h
-	))
+)
+	: texture_(::SDL_CreateTexture(
+			rndr.get(),
+			format,
+			access,
+			w,
+			h
+		))
 {
 	if (!texture_)
 		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
@@ -89,11 +89,11 @@ texture::texture(
 texture::texture(
 	renderer& rndr,
 	const boost::filesystem::path& filename
-) :
-	texture_(::IMG_LoadTexture(
-		rndr.get(),
-		filename.string().c_str()
-	))
+)
+	: texture_(::IMG_LoadTexture(
+			rndr.get(),
+			filename.string().c_str()
+		))
 {
 	if (!texture_)
 		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
@@ -102,11 +102,11 @@ texture::texture(
 texture::texture(
 	renderer& rndr,
 	surface& srfc
-) :
-	texture_(::SDL_CreateTextureFromSurface(
-		rndr.get(),
-		srfc.get()
-	))
+)
+	: texture_(::SDL_CreateTextureFromSurface(
+			rndr.get(),
+			srfc.get()
+		))
 {
 	if (!texture_)
 		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());

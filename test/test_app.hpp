@@ -73,17 +73,17 @@ namespace test {
 class section_controller;
 class queue_controller;
 
-class section_controller :
-	public meck::controller
+class section_controller
+	: public meck::controller
 {
 public:
 	explicit
 	section_controller(
 		meck::application& app,
 		const meck::controller_ptr& ctrlr
-	) :
-		meck::controller(app),
-		queue_controller_(ctrlr)
+	)
+		: meck::controller(app)
+		, queue_controller_(ctrlr)
 	{}
 	
 	virtual void
@@ -99,16 +99,16 @@ protected:
 	meck::controller_ptr queue_controller_;
 };
 
-class configure_controller :
-	public section_controller
+class configure_controller
+	: public section_controller
 {
 public:
 	explicit
 	configure_controller(
 		meck::application& app,
 		const meck::controller_ptr& ctrlr
-	) :
-		section_controller(app, ctrlr)
+	)
+		: section_controller(app, ctrlr)
 	{}
 	
 	virtual void
@@ -116,17 +116,17 @@ public:
 	
 };
 
-class font_controller :
-	public section_controller
+class font_controller
+	: public section_controller
 {
 public:
 	explicit
 	font_controller(
 		meck::application& app,
 		const meck::controller_ptr& ctrlr
-	) :
-		section_controller(app, ctrlr),
-		font_("../resource/font/ubuntu-family/UbuntuMono-R.ttf", 32)
+	)
+		: section_controller(app, ctrlr)
+		, font_("../resource/font/ubuntu-family/UbuntuMono-R.ttf", 32)
 	{}
 	
 	virtual void
@@ -136,20 +136,20 @@ protected:
 	meck::font font_;
 };
 
-class keycode_controller :
-	public section_controller
+class keycode_controller
+	: public section_controller
 {
 public:
 	explicit
 	keycode_controller(
 		meck::application& app,
 		const meck::controller_ptr& ctrlr
-	) :
-		section_controller(app, ctrlr),
-		frame_(0),
-		frame_limit_(8),
-		menu_keydown_(false),
-		menu_keyup_(false)
+	)
+		: section_controller(app, ctrlr)
+		, frame_(0)
+		, frame_limit_(8)
+		, menu_keydown_(false)
+		, menu_keyup_(false)
 	{
 		KEYCODE_DISPATCH(keycode_controller, menu, "game_control");
 	}
@@ -169,20 +169,20 @@ protected:
 	bool menu_keyup_;
 };
 
-class renderer_controller :
-	public section_controller
+class renderer_controller
+	: public section_controller
 {
 public:
 	explicit
 	renderer_controller(
 		meck::application& app,
 		const meck::controller_ptr& ctrlr
-	) :
-		section_controller(app, ctrlr),
-		frame_(0),
-		font_("../resource/font/ubuntu-family/UbuntuMono-R.ttf", 32),
-		fox_text_(nullptr),
-		qmark_image_(nullptr)
+	)
+		: section_controller(app, ctrlr)
+		, frame_(0)
+		, font_("../resource/font/ubuntu-family/UbuntuMono-R.ttf", 32)
+		, fox_text_(nullptr)
+		, qmark_image_(nullptr)
 	{}
 	
 	virtual void
@@ -190,13 +190,13 @@ public:
 		meck::controller::init();
 		
 		fox_text_ = font_.render_text_solid(
-			*app_.get_renderer(),
+			app_.get_renderer(),
 			"The quick brown fox jumps over the lazy dog",
 			{255, 255, 255, 255}
 		);
 		
 		qmark_image_ = meck::texture(
-			*app_.get_renderer(),
+			app_.get_renderer(),
 			"../resource/img/question-mark.png"
 		);
 	}
@@ -214,8 +214,35 @@ protected:
 	meck::texture qmark_image_;
 };
 
-class queue_controller :
-	public meck::controller
+class ui_block_controller
+	: public section_controller
+{
+public:
+	explicit
+	ui_block_controller(
+		meck::application& app,
+		const meck::controller_ptr& ctrlr
+	);
+	
+	virtual void
+	think();
+	
+	virtual void
+	render();
+	
+protected:
+	meck::ui::vert_container body_block_;
+	meck::ui::horz_container header_block_;
+	meck::ui::vert_container menu_block_;
+	meck::ui::block header_0_block_;
+	meck::ui::block header_1_block_;
+	meck::ui::block header_2_block_;
+	meck::ui::block menu_0_block_;
+	meck::ui::block menu_1_block_;
+};
+
+class queue_controller
+	: public meck::controller
 {
 public:
 	explicit
@@ -243,6 +270,7 @@ public:
 			ADD_CONTROLLER(font);
 			ADD_CONTROLLER(keycode);
 			ADD_CONTROLLER(renderer);
+			ADD_CONTROLLER(ui_block);
 			
 #undef ADD_CONTROLLER
 		}

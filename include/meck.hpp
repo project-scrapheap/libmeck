@@ -79,5 +79,9 @@
 #include <meck/tick.hpp>
 #include <meck/window.hpp>
 
+#include <meck/ui/block.hpp>
+#include <meck/ui/container.hpp>
+#include <meck/ui/overlay.hpp>
+
 #endif
 

@@ -67,65 +67,93 @@
 
 namespace test {
 
-void
-renderer_controller::think() {
+ui_block_controller::ui_block_controller(
+	meck::application& app,
+	const meck::controller_ptr& ctrlr
+)
+	: section_controller(app, ctrlr)
+	, body_block_(ui_overlay_)
+	, header_block_(ui_overlay_)
+	, menu_block_(ui_overlay_)
+	, header_0_block_(ui_overlay_)
+	, header_1_block_(ui_overlay_)
+	, header_2_block_(ui_overlay_)
+	, menu_0_block_(ui_overlay_)
+	, menu_1_block_(ui_overlay_)
+{
+	ui_overlay_.set_root(body_block_);
+	
+	body_block_.add(header_block_);
+	header_block_.add(header_0_block_);
+	header_block_.add(header_1_block_);
+	header_block_.add(header_2_block_);
+	
+	body_block_.add(menu_block_);
+	menu_block_.add(menu_0_block_);
+	menu_block_.add(menu_1_block_);
+	
+	body_block_.set_size(680, 500);
+	body_block_.set_inner_color({
+		255,
+		255,
+		255,
+		255
+	});
+	body_block_.center();
+	
+	header_block_.expand_width();
+	header_block_.set_height(100);
+	header_block_.set_inner_color({
+		127,
+		127,
+		127,
+		255
+	});
+	
+	for (auto header_item : header_block_) {
+		header_item->set_width(1.0 / 3.0);
+		header_item->set_border(10, 10);
+		header_item->expand_height();
+	}
+	
+	header_0_block_.set_inner_color({255, 0, 0, 255});
+	header_1_block_.set_inner_color({0, 255, 0, 255});
+	header_2_block_.set_inner_color({0, 0, 255, 255});
+	
+	menu_block_.expand_width();
+	menu_block_.set_height(400);
+	menu_block_.set_border(10, 10);
+	menu_block_.set_inner_color({
+		255,
+		255,
+		255,
+		255
+	});
+	
+	for (auto menu_item : menu_block_) {
+		menu_item->expand_width();
+		menu_item->set_border(10, 10);
+		menu_item->set_height(190);
+	}
+	
+	menu_0_block_.set_inner_color({255, 255, 0, 255});
+	menu_1_block_.set_inner_color({0, 255, 255, 255});
+	
+	ui_overlay_.setup();
 }
 
 void
-renderer_controller::render() {
-	using meck::point;
-	using meck::rect;
-	
-	meck::renderer& rndr = app_.get_renderer();
-	
-	rndr.set_draw_color(255, 255, 255);
-	
-	rndr.draw_rect(10, 10, 20, 20);
-	rndr.draw_rect(30, 10, 50, 30);
-	
-	rndr.fill_rect(10, 40, 20, 50);
-	rndr.fill_rect(30, 40, 50, 60);
-	
-	for (int x_i = 60; x_i < 120; x_i += 2)
-		rndr.draw_point(x_i, 10);
-	
-	for (int y_i = 10; y_i < 70; y_i += 2)
-		rndr.draw_point(60, y_i);
-	
-	std::vector<rect> rs {
-		rect(point(100, 100), point(40, 40)),
-		rect(point(140, 140), point(80, 80)),
-	};
-	rndr.draw_rects(rs);
-	
-	rndr.copy(fox_text_, boost::none, point(70, 20));
-	rndr.copy(qmark_image_, boost::none, point(514, 314));
-	
-	rndr.set_draw_color(255, 0, 0);
-	rndr.fill_rect(100, 460, 200, 560);
-	
-	rndr.set_draw_color(0, 255, 0);
-	rndr.fill_rect(210, 460, 310, 560);
-	
-	rndr.set_draw_color(0, 0, 255);
-	rndr.fill_rect(320, 460, 420, 560);
-	
-	rndr.set_draw_color(255, 255, 255);
-	
-	rndr.draw_line(100, 570, 770, 570);
-	rndr.draw_line(770, 60, 770, 570);
-	
-	rndr.draw_line(110, 580, 780, 580);
-	rndr.draw_line(780, 70, 780, 580);
-	
-	rndr.set_draw_color(0, 0, 0);
-	
+ui_block_controller::think() {
+}
+
+void
+ui_block_controller::render() {
+	ui_overlay_.render();
 	meck::detail::test::compare_renderer_to_file(
 		app_,
-		"test_app-data/renderer-0.bmp",
-		"test_app-data/renderer-0-screenshot.bmp"
+		"test_app-data/ui_block-0.bmp",
+		"test_app-data/ui_block-0-screenshot.bmp"
 	);
-	
 	next_controller();
 }
 

@@ -121,22 +121,22 @@ public:
 		return rect(p1, p2 - p1);
 	}
 	
-	inline
+	inline explicit
 	rect(
 		const int x = 0,
 		const int y = 0,
 		const int w = 0,
 		const int h = 0
-	) noexcept:
-		rect_ {x, y, w, h}
+	) noexcept
+		: rect_ {x, y, w, h}
 	{
 	}
 	
 	inline
 	rect(
-		const ::SDL_Rect& other
-	) noexcept:
-		rect(other.x, other.y, other.w, other.h)
+		const ::SDL_Rect& rhs
+	) noexcept
+		: rect(rhs.x, rhs.y, rhs.w, rhs.h)
 	{
 	}
 	
@@ -148,8 +148,8 @@ public:
 	rect(
 		const point& corner,
 		const point& size
-	)  noexcept:
-		rect(corner.x(), corner.y(), size.x(), size.y())
+	)  noexcept
+		: rect(corner.x(), corner.y(), size.x(), size.y())
 	{
 	}
 	

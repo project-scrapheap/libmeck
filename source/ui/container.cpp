@@ -61,73 +61,11 @@
  *  3. This notice may not be removed or altered from any source distribution.
  */
 
-#include "test_app.hpp"
+#include <meck/ui/container.hpp>
 
-#include <meck/detail/test.hpp>
+namespace meck {
+namespace ui {
 
-namespace test {
-
-void
-renderer_controller::think() {
-}
-
-void
-renderer_controller::render() {
-	using meck::point;
-	using meck::rect;
-	
-	meck::renderer& rndr = app_.get_renderer();
-	
-	rndr.set_draw_color(255, 255, 255);
-	
-	rndr.draw_rect(10, 10, 20, 20);
-	rndr.draw_rect(30, 10, 50, 30);
-	
-	rndr.fill_rect(10, 40, 20, 50);
-	rndr.fill_rect(30, 40, 50, 60);
-	
-	for (int x_i = 60; x_i < 120; x_i += 2)
-		rndr.draw_point(x_i, 10);
-	
-	for (int y_i = 10; y_i < 70; y_i += 2)
-		rndr.draw_point(60, y_i);
-	
-	std::vector<rect> rs {
-		rect(point(100, 100), point(40, 40)),
-		rect(point(140, 140), point(80, 80)),
-	};
-	rndr.draw_rects(rs);
-	
-	rndr.copy(fox_text_, boost::none, point(70, 20));
-	rndr.copy(qmark_image_, boost::none, point(514, 314));
-	
-	rndr.set_draw_color(255, 0, 0);
-	rndr.fill_rect(100, 460, 200, 560);
-	
-	rndr.set_draw_color(0, 255, 0);
-	rndr.fill_rect(210, 460, 310, 560);
-	
-	rndr.set_draw_color(0, 0, 255);
-	rndr.fill_rect(320, 460, 420, 560);
-	
-	rndr.set_draw_color(255, 255, 255);
-	
-	rndr.draw_line(100, 570, 770, 570);
-	rndr.draw_line(770, 60, 770, 570);
-	
-	rndr.draw_line(110, 580, 780, 580);
-	rndr.draw_line(780, 70, 780, 580);
-	
-	rndr.set_draw_color(0, 0, 0);
-	
-	meck::detail::test::compare_renderer_to_file(
-		app_,
-		"test_app-data/renderer-0.bmp",
-		"test_app-data/renderer-0-screenshot.bmp"
-	);
-	
-	next_controller();
-}
-
-} // namespace:test
+} // namespace:ui
+} // namespace:meck
 

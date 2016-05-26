@@ -69,17 +69,17 @@ application::application(
 	const ::Uint32 sdl_flags,
 	const ::Uint32 img_flags,
 	const boost::program_options::variables_map& opt_vm
-) :
-	loop_(true),
-	first_config_(true),
-	frame_delay_(0),
-	frame_count_(0),
-	frames_per_second_(0),
-	rendered_frames_(0),
-	event_tick_lim_(10),
-	opt_vm_(opt_vm),
-	misc_interval_(timer_, 250),
-	status_interval_(timer_, 1000)
+)
+	: loop_(true)
+	, first_config_(true)
+	, frame_delay_(0)
+	, frame_count_(0)
+	, frames_per_second_(0)
+	, rendered_frames_(0)
+	, event_tick_lim_(10)
+	, opt_vm_(opt_vm)
+	, misc_interval_(timer_, 250)
+	, status_interval_(timer_, 1000)
 {
 	if (::SDL_Init(sdl_flags) < 0)
 		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
@@ -172,6 +172,11 @@ application::configure() {
 		| (accelerated? SDL_RENDERER_ACCELERATED: SDL_RENDERER_SOFTWARE)
 		| (vsync? SDL_RENDERER_PRESENTVSYNC: 0)
 	));
+	
+	renderer_->set_logical_size(
+		window_->get_width(),
+		window_->get_height()
+	);
 }
 
 void
@@ -190,8 +195,8 @@ application::loop() {
 	while (loop_) {
 		timer_.update();
 		
-		if (controller_queue_.empty() || !controller_queue_.front().get())
-			RUNTIME_ERROR("controller queue empty or front is NULL");
+		RUNTIME_ASSERT(!controller_queue_.empty() &&
+			controller_queue_.front().get());
 		
 		controller_queue_.front()->prepare();
 		
@@ -243,6 +248,9 @@ application::before_render() {
 
 void
 application::after_render() {
+	auto current = controller_queue_.front();
+	
+	current->get_ui_overlay().render();
 	renderer_->present();
 	
 	frame_count_++;
@@ -258,7 +266,7 @@ application::after_render() {
 				frame_count_,
 				frames_per_second_,
 				rendered_frames_,
-				controller_queue_.front()->get_name()
+				current->get_name()
 			).c_str()
 		);
 
@@ -287,6 +295,7 @@ void
 application::queue_controller(
 	controller_ptr ctrlr
 ) {
+	RUNTIME_ASSERT(ctrlr.get());
 	controller_queue_.push(ctrlr);
 	ctrlr->init();
 }

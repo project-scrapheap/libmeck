@@ -68,8 +68,8 @@ namespace meck {
 
 keycode_dispatcher::keycode_dispatcher(
 	application& app
-) :
-	app_(app)
+)
+	: app_(app)
 {
 }
 
