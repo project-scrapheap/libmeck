@@ -139,7 +139,7 @@ ui_block_controller::ui_block_controller(
 	menu_0_block_.set_inner_color({255, 255, 0, 255});
 	menu_1_block_.set_inner_color({0, 255, 255, 255});
 	
-	ui_overlay_.setup();
+	ui_overlay_.finalize();
 }
 
 void

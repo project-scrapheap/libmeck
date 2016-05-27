@@ -147,9 +147,9 @@ overlay::render() {
 }
 
 void
-overlay::setup() {
+overlay::finalize() {
 	RUNTIME_ASSERT(root_);
-	root_->setup();
+	root_->finalize();
 }
 
 controller&

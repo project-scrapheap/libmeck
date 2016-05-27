@@ -173,11 +173,11 @@ public:
 	{}
 	
 	virtual void
-	setup() {
+	finalize() {
 		point relative(inner_rect_.x(), inner_rect_.y());
 		for (auto it : children_) {
 			it->set_position(relative);
-			it->setup();
+			it->finalize();
 			relative.y(relative.y() + it->get_outer_rect().h());
 		}
 	}
@@ -196,11 +196,11 @@ public:
 	{}
 	
 	virtual void
-	setup() {
+	finalize() {
 		point relative(inner_rect_.x(), inner_rect_.y());
 		for (auto it : children_) {
 			it->set_position(relative);
-			it->setup();
+			it->finalize();
 			relative.x(relative.x() + it->get_outer_rect().w());
 		}
 	}

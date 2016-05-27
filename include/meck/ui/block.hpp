@@ -101,7 +101,7 @@ public:
 	}
 	
 	virtual void
-	setup() {
+	finalize() {
 	}
 	
 	virtual void

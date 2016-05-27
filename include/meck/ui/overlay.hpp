@@ -134,7 +134,7 @@ public:
 	render();
 	
 	virtual void
-	setup();
+	finalize();
 	
 	virtual controller&
 	get_controller();
