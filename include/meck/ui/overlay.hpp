@@ -69,18 +69,22 @@
 
 #include <boost/noncopyable.hpp>
 
-#include <meck/forward.hpp>
 #include <meck/point.hpp>
 #include <meck/reactor.hpp>
 #include <meck/rect.hpp>
-#include <meck/renderer.hpp>
-#include <meck/texture.hpp>
-#include <meck/tick.hpp>
 
 #include <SDL.h>
 
 namespace meck {
+
+class application;
+class controller;
+
 namespace ui {
+
+class container;
+class theme;
+class widget;
 
 class overlay
 	: private boost::noncopyable
@@ -135,6 +139,9 @@ public:
 	
 	virtual void
 	finalize();
+	
+	virtual void
+	init();
 	
 	virtual controller&
 	get_controller();

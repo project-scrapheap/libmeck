@@ -65,11 +65,13 @@
 
 namespace test {
 
+/*
 void
 configure_controller::think() {
 	app_.configure();
 	next_controller();
 }
+*/
 
 } // namespace:test
 

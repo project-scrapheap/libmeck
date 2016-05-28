@@ -80,11 +80,14 @@ public:
 		overlay& olay
 	)
 		: block(olay)
+		, rerender_(true)
 	{}
-
-	virtual std::string
-	string_value() = 0;
 	
+	virtual std::string
+	get_value() = 0;
+	
+protected:
+	bool rerender_;
 };
 
 inline bool

@@ -65,7 +65,6 @@
 #define MECK_UI_THEME_HPP
 
 #include <meck/font.hpp>
-#include <meck/forward.hpp>
 #include <meck/point.hpp>
 #include <meck/rect.hpp>
 #include <meck/renderer.hpp>
@@ -76,16 +75,44 @@
 namespace meck {
 namespace ui {
 
+class overlay;
+
 class theme
 	: private boost::noncopyable
 {
 public:
+	explicit
 	theme(
-		controller& ctrlr
+		overlay& olay
 	);
 	
-protected:
-	controller& controller_;
+	virtual void
+	init();
+	
+	overlay& owner;
+	
+	int normal_font_pts;
+	font normal_font;
+	
+	int bold_font_pts;
+	font bold_font;
+	
+	int italic_font_pts;
+	font italic_font;
+	
+	point label_border;
+	point textbox_border;
+	
+	int textbox_before;
+	int textbox_after;
+	
+	::SDL_Color bg;
+	::SDL_Color container_bg;
+	
+	::SDL_Color text_fg;
+	
+	::SDL_Color textbox_bg;
+	::SDL_Color textbox_focus_bg;
 };
 
 } // namespace:ui

@@ -111,6 +111,8 @@ application::init() {
 
 void
 application::reset() noexcept {
+	controller_queue().swap(controller_queue_);
+	
 	pt_.clear();
 	
 	renderer_.reset();
@@ -198,7 +200,9 @@ application::loop() {
 		RUNTIME_ASSERT(!controller_queue_.empty() &&
 			controller_queue_.front().get());
 		
-		controller_queue_.front()->prepare();
+		auto current = controller_queue_.front();
+		
+		current->prepare();
 		
 		int poll_io = 0;
 		int poll_evt = 0;
@@ -216,15 +220,16 @@ application::loop() {
 			) {
 				stop();
 				break;
-			} else if (controller_queue_.front()->react(event)) {
+			} else if (current->react(event)) {
 				break;
 			}
 		}
 		
-		controller_queue_.front()->think();
+		current->get_ui_overlay().think();
+		current->think();
 		
 		before_render();
-		controller_queue_.front()->render();
+		current->render();
 		after_render();
 		
 		if (misc_interval_.expired())
@@ -233,7 +238,7 @@ application::loop() {
 		if (controller_queue_.size() > 1)
 			controller_queue_.pop();
 	}
-
+	
 	after_loop();
 }
 
@@ -298,6 +303,7 @@ application::queue_controller(
 	RUNTIME_ASSERT(ctrlr.get());
 	controller_queue_.push(ctrlr);
 	ctrlr->init();
+	ctrlr->finalize();
 }
 
 } // namespace:meck

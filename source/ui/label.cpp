@@ -61,10 +61,22 @@
  *  3. This notice may not be removed or altered from any source distribution.
  */
 
+#include <meck/application.hpp>
 #include <meck/ui/label.hpp>
 
 namespace meck {
 namespace ui {
+
+bool
+label::react(
+	::SDL_Event& event
+) {
+	if (for_ && test_clicked(*this, event, SDL_BUTTON_LEFT)) {
+		owner_.set_focused(*for_);
+		return true;
+	}
+	return false;
+}
 
 } // namespace:ui
 } // namespace:meck

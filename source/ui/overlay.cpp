@@ -73,7 +73,7 @@ namespace ui {
 overlay::overlay(
 	controller& ctrlr
 )
-	: theme_(new theme(ctrlr))
+	: theme_(new theme(*this))
 	, controller_(ctrlr)
 	, root_(nullptr)
 	, focused_(nullptr)
@@ -133,7 +133,16 @@ bool
 overlay::react(
 	::SDL_Event& event
 ) {
-	return root_? root_->react(event): false;
+	if (root_) {
+		// The currently focused widget should loose focus if the user
+		// is clicking somewhere, and no UI component reacts to the
+		// event.
+		const bool reacted = root_->react(event);
+		if (!reacted && event.type == SDL_MOUSEBUTTONDOWN)
+			set_focused();
+		return reacted;
+	}
+	return false;
 }
 
 void
@@ -148,8 +157,12 @@ overlay::render() {
 
 void
 overlay::finalize() {
-	RUNTIME_ASSERT(root_);
-	root_->finalize();
+	if (root_) root_->finalize();
+}
+
+void
+overlay::init() {
+	get_theme().init();
 }
 
 controller&

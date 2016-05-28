@@ -61,40 +61,61 @@
  *  3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef MECK_FORWARD_HPP
-#define MECK_FORWARD_HPP
+#ifndef MECK_UI_IMAGE_HPP
+#define MECK_UI_IMAGE_HPP
+
+#include <boost/filesystem.hpp>
+
+#include <meck/texture.hpp>
+#include <meck/ui/text.hpp>
+
+#include <SDL.h>
 
 namespace meck {
-
-class application;
-class controller;
-class font;
-class interval;
-class keycode_dispatcher;
-class point;
-class surface;
-class texture;
-class reactor;
-class rect;
-class renderer;
-class timer;
-class window;
-
 namespace ui {
 
-class ascii_textbox;
-class block;
-class container;
-class label;
-class overlay;
-class regex_validator;
-class theme;
-class utf8_textbox;
-class validator;
-class widget;
+class image
+	: public block
+{
+public:
+	explicit
+	image(
+		overlay& olay,
+		const boost::filesystem::path& path
+	)
+		: block(olay)
+		, image_texture_(
+			olay.get_application().get_renderer(),
+			path
+		)
+	{
+		render_outer_rect_ = false;
+		render_inner_rect_ = false;
+		
+		auto image_size = image_texture_.get_size();
+		
+		set_size(
+			image_size.x(),
+			image_size.y()
+		);
+	}
+	
+	virtual void
+	finalize() {
+		set_size(
+			outer_rect_.w() + 2 * border_size_.x(),
+			outer_rect_.h() + 2 * border_size_.y()
+		);
+	}
+	
+	virtual void
+	render();
+	
+protected:
+	texture image_texture_;
+};
 
 } // namespace:ui
-
 } // namespace:meck
 
 #endif

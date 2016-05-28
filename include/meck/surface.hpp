@@ -253,6 +253,7 @@ public:
 	convert(
 		const ::SDL_PixelFormat& format
 	) {
+		RUNTIME_ASSERT(surface_);
 		::SDL_Surface* sfce = ::SDL_ConvertSurface(
 			surface_,
 			&format,
@@ -267,6 +268,7 @@ public:
 	convert(
 		::Uint32 pxlformat
 	) {
+		RUNTIME_ASSERT(surface_);
 		::SDL_Surface* sfce = ::SDL_ConvertSurfaceFormat(
 			surface_,
 			pxlformat,
@@ -283,6 +285,7 @@ public:
 		surface& dst,
 		const rect& dstrect
 	) {
+		RUNTIME_ASSERT(surface_);
 		rect tmp_dstrect(dstrect);
 		if (::SDL_BlitSurface(
 			surface_,
@@ -299,6 +302,7 @@ public:
 		surface& dst,
 		const boost::optional<rect>& dstrect
 	) {
+		RUNTIME_ASSERT(surface_);
 		rect tmp_dstrect(dstrect? *dstrect: rect());
 		if (::SDL_BlitScaled(
 			surface_,
@@ -311,6 +315,7 @@ public:
 	
 	rect
 	get_clip_rect() const {
+		RUNTIME_ASSERT(surface_);
 		rect r;
 		::SDL_GetClipRect(surface_, r.get());
 		return r;
@@ -318,6 +323,7 @@ public:
 	
 	::Uint32
 	get_color_key() const {
+		RUNTIME_ASSERT(surface_);
 		::Uint32 key;
 		if (::SDL_GetColorKey(surface_, &key))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
@@ -326,6 +332,7 @@ public:
 	
 	::Uint8
 	get_alpha_mod() const {
+		RUNTIME_ASSERT(surface_);
 		::Uint8 alpha;
 		if (::SDL_GetSurfaceAlphaMod(surface_, &alpha))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
@@ -334,6 +341,7 @@ public:
 	
 	::SDL_BlendMode
 	get_blend_mode() const {
+		RUNTIME_ASSERT(surface_);
 		::SDL_BlendMode blend_mode;
 		if (::SDL_GetSurfaceBlendMode(surface_, &blend_mode))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
@@ -346,6 +354,7 @@ public:
 		::Uint8& g,
 		::Uint8& b
 	) const {
+		RUNTIME_ASSERT(surface_);
 		if (::SDL_GetSurfaceColorMod(surface_, &r, &g, &b))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 	}
@@ -354,6 +363,7 @@ public:
 	set_clip_rect(
 		const boost::optional<rect>& r = boost::none
 	) {
+		RUNTIME_ASSERT(surface_);
 		if (::SDL_SetClipRect(surface_, r? (*r).get(): nullptr) != SDL_TRUE)
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 		return *this;
@@ -364,6 +374,7 @@ public:
 		const bool flag,
 		const ::Uint32 key
 	) {
+		RUNTIME_ASSERT(surface_);
 		if (::SDL_SetColorKey(surface_, flag, key))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 		return *this;
@@ -373,6 +384,7 @@ public:
 	set_alpha_mod(
 		const ::Uint8 alpha = 255
 	) {
+		RUNTIME_ASSERT(surface_);
 		if (::SDL_SetSurfaceAlphaMod(surface_, alpha))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 		return *this;
@@ -382,6 +394,7 @@ public:
 	set_blend_mode(
 		const ::SDL_BlendMode blend_mode
 	) {
+		RUNTIME_ASSERT(surface_);
 		if (::SDL_SetSurfaceBlendMode(surface_, blend_mode))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 		return *this;
@@ -393,6 +406,7 @@ public:
 		const ::Uint8 g = 255,
 		const ::Uint8 b = 255
 	) {
+		RUNTIME_ASSERT(surface_);
 		if (SDL_SetSurfaceColorMod(surface_, r, g, b))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 		return *this;
@@ -402,6 +416,7 @@ public:
 	set_RLE(
 		const bool flag
 	) {
+		RUNTIME_ASSERT(surface_);
 		if (::SDL_SetSurfaceRLE(surface_, static_cast<int>(flag)))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 		return *this;
@@ -412,6 +427,7 @@ public:
 		const boost::optional<rect>& r,
 		const ::Uint32 color
 	) {
+		RUNTIME_ASSERT(surface_);
 		if (::SDL_FillRect(surface_, r? (*r).get(): nullptr, color))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 		return *this;
@@ -426,6 +442,7 @@ public:
 		const Container& rs,
 		::Uint32 color
 	) {
+		RUNTIME_ASSERT(surface_);
 		DOWNGRADE_CONTAINER(::SDL_Rect, ds, rs)
 		if (::SDL_FillRects(surface_, ds.data(), rs.size(), color))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
@@ -434,11 +451,13 @@ public:
 	
 	int
 	get_width() const {
+		RUNTIME_ASSERT(surface_);
 		return surface_->w;
 	}
 	
 	int
 	get_height() const {
+		RUNTIME_ASSERT(surface_);
 		return surface_->h;
 	}
 	
@@ -449,11 +468,13 @@ public:
 	
 	const ::SDL_PixelFormat&
 	get_format() const {
+		RUNTIME_ASSERT(surface_);
 		return *surface_->format;
 	}
 	
 	::Uint32
 	get_format_format() const {
+		RUNTIME_ASSERT(surface_);
 		return surface_->format->format;
 	}
 	

@@ -91,9 +91,7 @@ public:
 	explicit
 	container(
 		overlay& olay
-	)
-		: block(olay)
-	{}
+	);
 	
 	virtual bool
 	react(
@@ -176,9 +174,17 @@ public:
 	finalize() {
 		point relative(inner_rect_.x(), inner_rect_.y());
 		for (auto it : children_) {
-			it->set_position(relative);
-			it->finalize();
-			relative.y(relative.y() + it->get_outer_rect().h());
+			if (it->get_positioning() == positioning::MANUAL) {
+				it->finalize();
+				continue;
+			} else {
+				relative.y(relative.y() + it->get_before());
+				it->set_position(relative);
+				it->finalize();
+				relative.y(relative.y()
+					+ it->get_outer_rect().h()
+					+ it->get_after());
+			}
 		}
 	}
 	
@@ -199,9 +205,17 @@ public:
 	finalize() {
 		point relative(inner_rect_.x(), inner_rect_.y());
 		for (auto it : children_) {
-			it->set_position(relative);
-			it->finalize();
-			relative.x(relative.x() + it->get_outer_rect().w());
+			if (it->get_positioning() == positioning::MANUAL) {
+				it->finalize();
+				continue;
+			} else {
+				relative.x(relative.x() + it->get_before());
+				it->set_position(relative);
+				it->finalize();
+				relative.x(relative.x()
+					+ it->get_outer_rect().w()
+					+ it->get_after());
+			}
 		}
 	}
 	

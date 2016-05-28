@@ -150,6 +150,7 @@ public:
 	
 	int
 	get_style() const {
+		RUNTIME_ASSERT(font_);
 		return ::TTF_GetFontStyle(font_);
 	}
 	
@@ -157,12 +158,14 @@ public:
 	set_style(
 		const int style = TTF_STYLE_NORMAL
 	) {
+		RUNTIME_ASSERT(font_);
 		::TTF_SetFontStyle(font_, style);
 		return *this;
 	}
 	
 	int
 	get_outline() const {
+		RUNTIME_ASSERT(font_);
 		return ::TTF_GetFontOutline(font_);
 	}
 	
@@ -170,12 +173,14 @@ public:
 	set_outline(
 		const int outline = 0
 	) {
+		RUNTIME_ASSERT(font_);
 		::TTF_SetFontOutline(font_, outline);
 		return *this;
 	}
 	
 	int
 	get_hinting() const {
+		RUNTIME_ASSERT(font_);
 		return ::TTF_GetFontHinting(font_);
 	}
 	
@@ -183,12 +188,14 @@ public:
 	set_hinting(
 		const int hinting = TTF_HINTING_NORMAL
 	) {
+		RUNTIME_ASSERT(font_);
 		::TTF_SetFontHinting(font_, hinting);
 		return *this;
 	}
 	
 	bool
 	get_kerning() const {
+		RUNTIME_ASSERT(font_);
 		return static_cast<bool>(::TTF_GetFontKerning(font_));
 	}
 	
@@ -196,41 +203,49 @@ public:
 	set_kerning(
 		const bool allowed = true
 	) {
+		RUNTIME_ASSERT(font_);
 		::TTF_SetFontKerning(font_, allowed);
 		return *this;
 	}
 	
 	int
 	get_height() const {
+		RUNTIME_ASSERT(font_);
 		return ::TTF_FontHeight(font_);
 	}
 	
 	int
 	get_ascent() const {
+		RUNTIME_ASSERT(font_);
 		return ::TTF_FontAscent(font_);
 	}
 	
 	int
 	get_descent() const {
+		RUNTIME_ASSERT(font_);
 		return ::TTF_FontDescent(font_);
 	}
 	
 	int
 	get_line_skip() const {
+		RUNTIME_ASSERT(font_);
 		return ::TTF_FontLineSkip(font_);
 	}
 	
 	long
 	get_num_faces() const {
+		RUNTIME_ASSERT(font_);
 		return ::TTF_FontFaces(font_);
 	}
 	
 	bool is_fixed_width() const {
+		RUNTIME_ASSERT(font_);
 		return ::TTF_FontFaceIsFixedWidth(font_);
 	}
 	
 	boost::optional<std::string>
 	get_family_name() const {
+		RUNTIME_ASSERT(font_);
 		const char* name = ::TTF_FontFaceFamilyName(font_);
 		return name?
 			OPT(std::string, std::string(name)):
@@ -239,6 +254,7 @@ public:
 	
 	boost::optional<std::string>
 	get_style_name() const {
+		RUNTIME_ASSERT(font_);
 		const char* name = ::TTF_FontFaceStyleName(font_);
 		return name?
 			OPT(std::string, std::string(name)):
@@ -249,6 +265,7 @@ public:
 	is_glyph_provided(
 		const ::Uint16 ch
 	) const {
+		RUNTIME_ASSERT(font_);
 		return ::TTF_GlyphIsProvided(font_, ch);
 	}
 	
@@ -261,6 +278,7 @@ public:
 		int& My,
 		int& advance
 	) const {
+		RUNTIME_ASSERT(font_);
 		if (::TTF_GlyphMetrics(font_, ch, &mx, &Mx, &my, &My, &advance))
 			RUNTIME_ERROR("TTF: %s", ::TTF_GetError());
 	}
@@ -269,6 +287,7 @@ public:
 	get_glyph_rect(
 		const ::Uint16 ch
 	) const {
+		RUNTIME_ASSERT(font_);
 		int mx;
 		int Mx;
 		int my;
@@ -282,6 +301,7 @@ public:
 	get_glyph_advance(
 		const ::Uint16 ch
 	) const {
+		RUNTIME_ASSERT(font_);
 		int mx;
 		int Mx;
 		int my;
@@ -295,6 +315,7 @@ public:
 	get_size_text(
 		const std::string& text
 	) const {
+		RUNTIME_ASSERT(font_);
 		int w;
 		int h;
 		if (::TTF_SizeText(font_, text.c_str(), &w, &h))
@@ -306,6 +327,7 @@ public:
 	get_size_UTF8(
 		const std::string& text
 	) const {
+		RUNTIME_ASSERT(font_);
 		int w;
 		int h;
 		if (::TTF_SizeUTF8(font_, text.c_str(), &w, &h))
@@ -317,6 +339,7 @@ public:
 	get_size_UNICODE(
 		const ::Uint16* text
 	) const {
+		RUNTIME_ASSERT(font_);
 		int w;
 		int h;
 		if (::TTF_SizeUNICODE(font_, text, &w, &h))
@@ -336,6 +359,7 @@ public:
 		const std::string& text,
 		const ::SDL_Color fg
 	) {
+		RUNTIME_ASSERT(font_);
 		::SDL_Surface* s = ::TTF_RenderText_Solid(font_, text.c_str(), fg);
 		if (!s)
 			RUNTIME_ERROR("TTF: %s", ::TTF_GetError());
@@ -347,6 +371,7 @@ public:
 		const std::string& text,
 		const ::SDL_Color fg
 	) {
+		RUNTIME_ASSERT(font_);
 		::SDL_Surface* s = ::TTF_RenderUTF8_Solid(font_, text.c_str(), fg);
 		if (!s)
 			RUNTIME_ERROR("TTF: %s", ::TTF_GetError());
@@ -358,6 +383,7 @@ public:
 		const Uint16* text,
 		const ::SDL_Color fg
 	) {
+		RUNTIME_ASSERT(font_);
 		::SDL_Surface* s = ::TTF_RenderUNICODE_Solid(font_, text, fg);
 		if (!s)
 			RUNTIME_ERROR("TTF: %s", ::TTF_GetError());
@@ -377,6 +403,7 @@ public:
 		const ::Uint16 ch,
 		const ::SDL_Color fg
 	) {
+		RUNTIME_ASSERT(font_);
 		::SDL_Surface* s = TTF_RenderGlyph_Solid(font_, ch, fg);
 		if (!s)
 			RUNTIME_ERROR("TTF: %s", ::TTF_GetError());
@@ -439,6 +466,7 @@ public:
 		const ::SDL_Color fg,
 		const ::SDL_Color bg
 	) {
+		RUNTIME_ASSERT(font_);
 		::SDL_Surface* s = TTF_RenderText_Shaded(font_, text.c_str(), fg, bg);
 		if (!s)
 			RUNTIME_ERROR("TTF: %s", ::TTF_GetError());
@@ -451,6 +479,7 @@ public:
 		const ::SDL_Color fg,
 		const ::SDL_Color bg
 	) {
+		RUNTIME_ASSERT(font_);
 		::SDL_Surface* s = TTF_RenderUTF8_Shaded(font_, text.c_str(), fg, bg);
 		if (!s)
 			RUNTIME_ERROR("TTF: %s", ::TTF_GetError());
@@ -463,6 +492,7 @@ public:
 		const ::SDL_Color fg,
 		const ::SDL_Color bg
 	) {
+		RUNTIME_ASSERT(font_);
 		::SDL_Surface* s = TTF_RenderUNICODE_Shaded(font_, text, fg, bg);
 		if (!s)
 			RUNTIME_ERROR("TTF: %s", ::TTF_GetError());
@@ -484,6 +514,7 @@ public:
 		const ::SDL_Color fg,
 		const ::SDL_Color bg
 	) {
+		RUNTIME_ASSERT(font_);
 		SDL_Surface* s = TTF_RenderGlyph_Shaded(font_, ch, fg, bg);
 		if (!s)
 			RUNTIME_ERROR("TTF: %s", ::TTF_GetError());
@@ -550,6 +581,7 @@ public:
 		const std::string& text,
 		const ::SDL_Color fg
 	) {
+		RUNTIME_ASSERT(font_);
 		::SDL_Surface* s = TTF_RenderText_Blended(font_, text.c_str(), fg);
 		if (!s)
 			RUNTIME_ERROR("TTF: %s", ::TTF_GetError());
@@ -561,6 +593,7 @@ public:
 		const std::string& text,
 		const ::SDL_Color fg
 	) {
+		RUNTIME_ASSERT(font_);
 		::SDL_Surface* s = TTF_RenderUTF8_Blended(font_, text.c_str(), fg);
 		if (!s)
 			RUNTIME_ERROR("TTF: %s", ::TTF_GetError());
@@ -572,6 +605,7 @@ public:
 		const Uint16* text,
 		const ::SDL_Color fg
 	) {
+		RUNTIME_ASSERT(font_);
 		::SDL_Surface* s = TTF_RenderUNICODE_Blended(font_, text, fg);
 		if (!s)
 			RUNTIME_ERROR("TTF: %s", ::TTF_GetError());
@@ -591,6 +625,7 @@ public:
 		const ::Uint16 ch,
 		const ::SDL_Color fg
 	) {
+		RUNTIME_ASSERT(font_);
 		SDL_Surface* s = TTF_RenderGlyph_Blended(font_, ch, fg);
 		if (!s)
 			RUNTIME_ERROR("TTF: %s", ::TTF_GetError());

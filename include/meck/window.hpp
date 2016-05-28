@@ -163,6 +163,7 @@ public:
 	
 	point
 	get_size() const {
+		RUNTIME_ASSERT(window_);
 		int w;
 		int h;
 		::SDL_GetWindowSize(window_, &w, &h);
@@ -181,6 +182,7 @@ public:
 	
 	point
 	get_drawable_size() const {
+		RUNTIME_ASSERT(window_);
 		int w;
 		int h;
 		::SDL_GL_GetDrawableSize(window_, &w, &h);
@@ -201,47 +203,55 @@ public:
 	set_title(
 		const std::string& title
 	) {
+		RUNTIME_ASSERT(window_);
 		::SDL_SetWindowTitle(window_, title.c_str());
 		return *this;
 	}
 	
 	std::string
 	get_title() const {
+		RUNTIME_ASSERT(window_);
 		return ::SDL_GetWindowTitle(window_);
 	}
 	
 	window&
 	maximize() {
+		RUNTIME_ASSERT(window_);
 		::SDL_MaximizeWindow(window_);
 		return *this;
 	}
 	
 	window&
 	minimize() {
+		RUNTIME_ASSERT(window_);
 		::SDL_MinimizeWindow(window_);
 		return *this;
 	}
 	
 	window&
 	hide() {
+		RUNTIME_ASSERT(window_);
 		::SDL_HideWindow(window_);
 		return *this;
 	}
 	
 	window&
 	restore() {
+		RUNTIME_ASSERT(window_);
 		::SDL_RestoreWindow(window_);
 		return *this;
 	}
 	
 	window&
 	raise() {
+		RUNTIME_ASSERT(window_);
 		::SDL_RaiseWindow(window_);
 		return *this;
 	}
 	
 	window&
 	show() {
+		RUNTIME_ASSERT(window_);
 		::SDL_ShowWindow(window_);
 		return *this;
 	}
@@ -250,6 +260,7 @@ public:
 	set_fullscreen(
 		const ::Uint32 flags
 	) {
+		RUNTIME_ASSERT(window_);
 		if (::SDL_SetWindowFullscreen(window_, flags))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 		return *this;
@@ -267,12 +278,14 @@ public:
 	set_size(
 		const point& size
 	) {
+		RUNTIME_ASSERT(window_);
 		::SDL_SetWindowSize(window_, size.x(), size.y());
 		return *this;
 	}
 	
 	float
 	get_brightness() const {
+		RUNTIME_ASSERT(window_);
 		return ::SDL_GetWindowBrightness(window_);
 	}
 	
@@ -280,6 +293,7 @@ public:
 	set_brightness(
 		const float brightness
 	) {
+		RUNTIME_ASSERT(window_);
 		if (::SDL_SetWindowBrightness(window_, brightness))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 		return *this;
@@ -287,6 +301,7 @@ public:
 	
 	point
 	get_position() const {
+		RUNTIME_ASSERT(window_);
 		int x;
 		int y;
 		::SDL_GetWindowPosition(window_, &x, &y);
@@ -305,12 +320,14 @@ public:
 	set_position(
 		const point& pos
 	) {
+		RUNTIME_ASSERT(window_);
 		::SDL_SetWindowPosition(window_, pos.x(), pos.y());
 		return *this;
 	}
 	
 	point
 	get_minimum_size() const {
+		RUNTIME_ASSERT(window_);
 		int w;
 		int h;
 		::SDL_GetWindowMinimumSize(window_, &w, &h);
@@ -329,12 +346,14 @@ public:
 	set_minimum_size(
 		const point& size
 	) {
+		RUNTIME_ASSERT(window_);
 		::SDL_SetWindowMinimumSize(window_, size.x(), size.y());
 		return *this;
 	}
 	
 	point
 	get_maximum_size() const {
+		RUNTIME_ASSERT(window_);
 		int w;
 		int h;
 		::SDL_GetWindowMaximumSize(window_, &w, &h);
@@ -353,12 +372,14 @@ public:
 	set_maximum_size(
 		const point& size
 	) {
+		RUNTIME_ASSERT(window_);
 		::SDL_SetWindowMaximumSize(window_, size.x(), size.y());
 		return *this;
 	}
 	
 	bool
 	get_grab() const {
+		RUNTIME_ASSERT(window_);
 		return ::SDL_GetWindowGrab(window_) == SDL_TRUE;
 	}
 	
@@ -366,12 +387,14 @@ public:
 	set_grab(
 		const bool grabbed
 	) {
+		RUNTIME_ASSERT(window_);
 		::SDL_SetWindowGrab(window_, static_cast<::SDL_bool>(grabbed));
 		return *this;
 	}
 	
 	int
 	get_display_index() const {
+		RUNTIME_ASSERT(window_);
 		int index = ::SDL_GetWindowDisplayIndex(window_);
 		if (index < 0)
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
@@ -382,12 +405,14 @@ public:
 	get_display_mode(
 		::SDL_DisplayMode& mode
 	) const {
+		RUNTIME_ASSERT(window_);
 		if (::SDL_GetWindowDisplayMode(window_, &mode))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 	}
 	
 	::Uint32
 	get_flags() const {
+		RUNTIME_ASSERT(window_);
 		return ::SDL_GetWindowFlags(window_);
 	}
 	
@@ -395,6 +420,7 @@ public:
 	set_icon(
 		surface& icon
 	) {
+		RUNTIME_ASSERT(window_);
 		::SDL_SetWindowIcon(window_, icon.get());
 		return *this;
 	}
@@ -403,12 +429,14 @@ public:
 	set_bordered(
 		const bool bordered = true
 	) {
+		RUNTIME_ASSERT(window_);
 		::SDL_SetWindowBordered(window_, static_cast<::SDL_bool>(bordered));
 		return *this;
 	}
 	
 	surface
 	get_window_surface() {
+		RUNTIME_ASSERT(window_);
 		return surface(::SDL_GetWindowSurface(window_));
 	}
 	

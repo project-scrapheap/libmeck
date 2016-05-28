@@ -62,17 +62,53 @@
  */
 
 #include <meck/application.hpp>
-#include <meck/controller.hpp>
+#include <meck/ui/overlay.hpp>
 #include <meck/ui/theme.hpp>
 
 namespace meck {
 namespace ui {
 
 theme::theme(
-	controller& ctrlr
+	overlay& olay
 )
-	: controller_(ctrlr)
-{
+	: owner(olay)
+	, normal_font_pts(16)
+	, normal_font(nullptr)
+	, bold_font_pts(16)
+	, bold_font(nullptr)
+	, italic_font_pts(16)
+	, italic_font(nullptr)
+	, label_border(0, 5)
+	, textbox_border(5, 5)
+	, textbox_before(0)
+	, textbox_after(5)
+	, bg {211, 211, 211, 255}
+	, container_bg {62, 62, 62, 255}
+	, text_fg {183, 183, 183, 255}
+	, textbox_bg {86, 86, 86, 255}
+	, textbox_focus_bg {36, 36, 36, 255}
+{}
+
+void
+theme::init() {
+	const auto& opt_vm = owner.get_application().get_opt_vm();
+	const auto& base_path = opt_vm["base-path"].as<std::string>();
+	
+	normal_font = font(
+		base_path + "/resource/font/default/normal.ttf",
+		normal_font_pts
+	);
+	
+	bold_font = font(
+		base_path + "/resource/font/default/bold.ttf",
+		normal_font_pts
+	);
+	
+	italic_font = font(
+		base_path + "/resource/font/default/italic.ttf",
+		normal_font_pts
+	);
+	
 }
 
 } // namespace:ui

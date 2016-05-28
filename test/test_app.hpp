@@ -99,6 +99,7 @@ protected:
 	meck::controller_ptr queue_controller_;
 };
 
+/*
 class configure_controller
 	: public section_controller
 {
@@ -115,6 +116,7 @@ public:
 	think();
 	
 };
+*/
 
 class font_controller
 	: public section_controller
@@ -180,15 +182,10 @@ public:
 	)
 		: section_controller(app, ctrlr)
 		, frame_(0)
-		, font_("../resource/font/ubuntu-family/UbuntuMono-R.ttf", 32)
+		, font_("resource/font/ubuntu-family/UbuntuMono-R.ttf", 32)
 		, fox_text_(nullptr)
 		, qmark_image_(nullptr)
-	{}
-	
-	virtual void
-	init() {
-		meck::controller::init();
-		
+	{
 		fox_text_ = font_.render_text_solid(
 			app_.get_renderer(),
 			"The quick brown fox jumps over the lazy dog",
@@ -197,7 +194,7 @@ public:
 		
 		qmark_image_ = meck::texture(
 			app_.get_renderer(),
-			"../resource/img/question-mark.png"
+			"resource/img/question-mark.png"
 		);
 	}
 	
@@ -241,6 +238,33 @@ protected:
 	meck::ui::block menu_1_block_;
 };
 
+class ui_theme_controller
+	: public section_controller
+{
+public:
+	explicit
+	ui_theme_controller(
+		meck::application& app,
+		const meck::controller_ptr& ctrlr
+	);
+	
+	virtual void
+	think();
+	
+	virtual void
+	render();
+	
+protected:
+	meck::ui::vert_container body_block_;
+	meck::ui::vert_container widget_block_;
+	meck::ui::label foo_label_;
+	meck::ui::ascii_textbox foo_textbox_;
+	meck::ui::label bar_label_;
+	meck::ui::ascii_textbox bar_textbox_;
+	
+	meck::ui::image qmark_image_;
+};
+
 class queue_controller
 	: public meck::controller
 {
@@ -266,11 +290,12 @@ public:
 		new Prefix##_controller(app_, self) \
 	)) \
 	/**/
-			ADD_CONTROLLER(configure);
+			//ADD_CONTROLLER(configure);
 			ADD_CONTROLLER(font);
 			ADD_CONTROLLER(keycode);
 			ADD_CONTROLLER(renderer);
 			ADD_CONTROLLER(ui_block);
+			ADD_CONTROLLER(ui_theme);
 			
 #undef ADD_CONTROLLER
 		}

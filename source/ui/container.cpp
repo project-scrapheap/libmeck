@@ -62,9 +62,18 @@
  */
 
 #include <meck/ui/container.hpp>
+#include <meck/ui/theme.hpp>
 
 namespace meck {
 namespace ui {
+
+container::container(
+	overlay& olay
+)
+	: block(olay)
+{
+	set_inner_color(olay.get_theme().container_bg);
+}
 
 } // namespace:ui
 } // namespace:meck

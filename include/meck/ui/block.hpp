@@ -67,7 +67,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 
-#include <meck/forward.hpp>
 #include <meck/hack.hpp>
 #include <meck/point.hpp>
 #include <meck/reactor.hpp>
@@ -81,6 +80,12 @@
 namespace meck {
 namespace ui {
 
+enum class positioning
+{
+	AUTOMATIC,
+	MANUAL
+};
+
 class block
 	: private boost::noncopyable
 	, public reactor
@@ -92,6 +97,12 @@ public:
 	)
 		: owner_(olay)
 		, parent_(nullptr)
+		, positioning_(positioning::AUTOMATIC)
+		, before_(0)
+		, after_(0)
+		, render_outer_rect_(false)
+		, render_inner_rect_(true)
+		, outer_color_ {0, 0, 0, 0}
 		, inner_color_ {0, 0, 0, 0}
 		, background_(nullptr)
 	{}
@@ -281,6 +292,11 @@ public:
 		));
 	}
 	
+	virtual const point&
+	get_border() const {
+		return border_size_;
+	}
+	
 	virtual block&
 	set_border(
 		const point& border
@@ -298,14 +314,66 @@ public:
 		return set_border(point(w, h));
 	}
 	
+	/**
+	 * Manual positioning is relative to the parent rectangle.
+	 */
 	virtual block&
 	set_position(
 		const point& pos
 	) {
-		outer_rect_.x(pos.x());
-		outer_rect_.y(pos.y());
+		if (positioning_ == positioning::MANUAL) {
+			outer_rect_.x(get_parent_rect().x() + pos.x());
+			outer_rect_.y(get_parent_rect().y() + pos.y());
+		} else {
+			outer_rect_.x(pos.x());
+			outer_rect_.y(pos.y());
+		}
 		update_inner_rect();
 		return *this;
+	}
+	
+	virtual block&
+	set_position(
+		const int x,
+		const int y
+	) {
+		return set_position(point(x, y));
+	}
+	
+	const positioning&
+	get_positioning() const {
+		return positioning_;
+	}
+	
+	void
+	set_positioning(
+		const positioning& pos
+	) {
+		positioning_ = pos;
+	}
+	
+	int
+	get_before() const {
+		return before_;
+	}
+	
+	void
+	set_before(
+		const int before
+	) {
+		before_ = before;
+	}
+	
+	int
+	get_after() const {
+		return after_;
+	}
+	
+	void
+	set_after(
+		const int after
+	) {
+		after_ = after;
 	}
 	
 protected:
@@ -320,12 +388,21 @@ protected:
 	overlay& owner_;
 	block* parent_;
 	
+	positioning positioning_;
+	
+	int before_;
+	int after_;
+	
 	point outer_size_;
 	point border_size_;
 	
 	rect outer_rect_;
 	rect inner_rect_;
 	
+	bool render_outer_rect_;
+	bool render_inner_rect_;
+	
+	::SDL_Color outer_color_;
 	::SDL_Color inner_color_;
 	
 	texture background_;

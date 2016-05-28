@@ -62,18 +62,33 @@
  */
 
 #include <meck/application.hpp>
+#include <meck/renderer.hpp>
 #include <meck/ui/block.hpp>
 
 namespace meck {
 namespace ui {
 
+static void
+render_rect(
+	renderer& rndr,
+	rect& rt,
+	const ::SDL_Color& col
+) {
+	rndr.set_draw_color(col);
+	rndr.fill_rect(rt);
+}
+
 void
 block::render() {
-	auto& renderer = owner_.get_application().get_renderer();
-	renderer::clip_guard_type guard(renderer, outer_rect_);
-	renderer.set_draw_color(inner_color_);
-	renderer.fill_rect(inner_rect_);
-	renderer.set_draw_color({
+	auto& rndr = owner_.get_application().get_renderer();
+	
+	if (render_outer_rect_)
+		render_rect(rndr, outer_rect_, outer_color_);
+	
+	if (render_inner_rect_)
+		render_rect(rndr, inner_rect_, inner_color_);
+	
+	rndr.set_draw_color({
 		0,
 		0,
 		0,

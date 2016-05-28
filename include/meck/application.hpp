@@ -88,13 +88,17 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 
+#ifndef MECK_SDL_DEFAULT_INIT
 #define MECK_SDL_DEFAULT_INIT \
 	(SDL_INIT_EVENTS | SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO) \
 	/**/
+#endif
 
+#ifndef MECK_IMG_DEFAULT_INIT
 #define MECK_IMG_DEFAULT_INIT \
 	(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF) \
 	/**/
+#endif
 
 #define APPLICATION_CONSTRUCTOR(Base, Child) \
 	explicit \
@@ -206,8 +210,18 @@ public:
 		return pt_;
 	}
 	
+	const boost::property_tree::ptree&
+	get_ptree() const noexcept {
+		return pt_;
+	}
+	
 	boost::program_options::variables_map&
 	get_opt_vm() noexcept {
+		return opt_vm_;
+	}
+	
+	const boost::program_options::variables_map&
+	get_opt_vm() const noexcept {
 		return opt_vm_;
 	}
 	
@@ -276,7 +290,7 @@ protected:
 	
 	boost::property_tree::ptree pt_;
 	boost::program_options::variables_map opt_vm_;
-
+	
 	timer timer_;
 	interval misc_interval_;
 	interval status_interval_;

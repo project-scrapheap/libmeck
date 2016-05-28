@@ -64,7 +64,7 @@
 #ifndef MECK_UI_ASCII_TEXTBOX_HPP
 #define MECK_UI_ASCII_TEXTBOX_HPP
 
-#include <meck/ui/widget.hpp>
+#include <meck/ui/text.hpp>
 
 #include <SDL.h>
 
@@ -72,15 +72,30 @@ namespace meck {
 namespace ui {
 
 class ascii_textbox
-	: public widget
+	: public text
 {
 public:
 	explicit
 	ascii_textbox(
 		overlay& olay
 	)
-		: widget(olay)
-	{}
+		: text(olay)
+		, append_(' ')
+		, value_("")
+		, value_texture_(nullptr)
+	{
+		before_ = olay.get_theme().textbox_before;
+		after_ = olay.get_theme().textbox_after;
+		render_outer_rect_ = true;
+		render_inner_rect_ = false;
+		outer_color_ = olay.get_theme().textbox_bg;
+	}
+	
+	virtual void
+	finalize() {
+		set_border(owner_.get_theme().textbox_border);
+		text::finalize();
+	}
 	
 	virtual bool
 	react(
@@ -96,6 +111,7 @@ public:
 protected:
 	std::string::value_type append_;
 	std::string value_;
+	texture value_texture_;
 };
 
 } // namespace:ui

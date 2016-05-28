@@ -61,119 +61,63 @@
  *  3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <meck/renderer.hpp>
-#include <meck/surface.hpp>
-#include <meck/texture.hpp>
+#ifndef MECK_UI_TEXT_HPP
+#define MECK_UI_TEXT_HPP
+
+#include <meck/ui/theme.hpp>
+#include <meck/ui/widget.hpp>
+
+#include <SDL.h>
 
 namespace meck {
+namespace ui {
 
-texture::texture(
-	renderer& rndr,
-	const ::Uint32 format,
-	const int access,
-	const int w,
-	const int h
-)
-	: texture_(::SDL_CreateTexture(
-		rndr.get(),
-		format,
-		access,
-		w,
-		h
-	))
+class text
+	: public widget
 {
-	if (!texture_)
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
-}
-
-texture::texture(
-	renderer& rndr,
-	const boost::filesystem::path& filename
-)
-	: texture_(::IMG_LoadTexture(
-		rndr.get(),
-		filename.string().c_str()
-	))
-{
-	if (!texture_)
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
-}
-
-texture::texture(
-	renderer& rndr,
-	surface& srfc
-)
-	: texture_(::SDL_CreateTextureFromSurface(
-		rndr.get(),
-		srfc.get()
-	))
-{
-	if (!texture_)
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
-}
-
-texture&
-texture::update(
-	const boost::optional<rect>& r,
-	const void* pixels,
-	const int pitch
-) {
-	RUNTIME_ASSERT(texture_);
-	if (::SDL_UpdateTexture(
-		texture_,
-		r? (*r).get(): nullptr,
-		pixels,
-		pitch
-	))
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
-	return *this;
-}
-
-texture&
-texture::update(
-	const boost::optional<rect>& r,
-	surface& srfc
-) {
-	RUNTIME_ASSERT(texture_);
+public:
+	explicit
+	text(
+		overlay& olay
+	)
+		: widget(olay)
+		, value_("")
+		, value_texture_(nullptr)
+	{}
 	
-	rect rr(r? *r: rect(0, 0, get_width(), get_height()));
-	
-	rr.w(std::min(rr.w(), srfc.get_width()));
-	rr.h(std::min(rr.h(), srfc.get_height()));
-	
-	if (get_format() != srfc.get_format_format()) {
-		surface converted = srfc.convert(get_format());
-		surface::lock_guard_type lock(converted);
-		return update(rr, lock.get_pixels(), lock.get_pitch());
+	virtual void
+	finalize() {
+		expand_width();
+		set_height(owner_.get_theme().normal_font.get_height()
+			+ 2 * border_size_.y());
 	}
-	surface::lock_guard_type lock(srfc);
-	return update(rr, lock.get_pixels(), lock.get_pitch());
-}
+	
+	virtual void
+	think();
+	
+	virtual void
+	render();
+	
+	virtual std::string
+	get_value() {
+		return value_;
+	}
+	
+	virtual void
+	set_value(
+		const std::string& txt
+	) {
+		value_ = txt;
+		rerender_ = true;
+	}
+	
+protected:
+	std::string value_;
+	texture value_texture_;
+};
 
-texture&
-texture::update_YUV(
-	const boost::optional<rect>& r,
-	const ::Uint8* yplane,
-	const int ypitch,
-	const ::Uint8* uplane,
-	const int upitch,
-	const ::Uint8* vplane,
-	const int vpitch
-) {
-	RUNTIME_ASSERT(texture_);
-	if (::SDL_UpdateYUVTexture(
-		texture_,
-		r? (*r).get(): nullptr,
-		yplane,
-		ypitch,
-		uplane,
-		upitch,
-		vplane,
-		vpitch
-	))
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
-	return *this;
-}
-
+} // namespace:ui
 } // namespace:meck
+
+#endif
 

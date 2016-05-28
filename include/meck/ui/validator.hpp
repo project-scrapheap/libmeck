@@ -68,8 +68,6 @@
 #include <boost/optional.hpp>
 #include <boost/regex.hpp>
 
-#include <meck/ui/widget.hpp>
-
 #include <SDL.h>
 
 namespace meck {

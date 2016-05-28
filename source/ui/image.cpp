@@ -61,119 +61,22 @@
  *  3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <meck/renderer.hpp>
-#include <meck/surface.hpp>
-#include <meck/texture.hpp>
+#include <meck/application.hpp>
+#include <meck/ui/image.hpp>
 
 namespace meck {
+namespace ui {
 
-texture::texture(
-	renderer& rndr,
-	const ::Uint32 format,
-	const int access,
-	const int w,
-	const int h
-)
-	: texture_(::SDL_CreateTexture(
-		rndr.get(),
-		format,
-		access,
-		w,
-		h
-	))
-{
-	if (!texture_)
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
+void
+image::render() {
+	block::render();
+	owner_.get_application().get_renderer().copy(
+		image_texture_,
+		boost::none,
+		inner_rect_.get_top_left()
+	);
 }
 
-texture::texture(
-	renderer& rndr,
-	const boost::filesystem::path& filename
-)
-	: texture_(::IMG_LoadTexture(
-		rndr.get(),
-		filename.string().c_str()
-	))
-{
-	if (!texture_)
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
-}
-
-texture::texture(
-	renderer& rndr,
-	surface& srfc
-)
-	: texture_(::SDL_CreateTextureFromSurface(
-		rndr.get(),
-		srfc.get()
-	))
-{
-	if (!texture_)
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
-}
-
-texture&
-texture::update(
-	const boost::optional<rect>& r,
-	const void* pixels,
-	const int pitch
-) {
-	RUNTIME_ASSERT(texture_);
-	if (::SDL_UpdateTexture(
-		texture_,
-		r? (*r).get(): nullptr,
-		pixels,
-		pitch
-	))
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
-	return *this;
-}
-
-texture&
-texture::update(
-	const boost::optional<rect>& r,
-	surface& srfc
-) {
-	RUNTIME_ASSERT(texture_);
-	
-	rect rr(r? *r: rect(0, 0, get_width(), get_height()));
-	
-	rr.w(std::min(rr.w(), srfc.get_width()));
-	rr.h(std::min(rr.h(), srfc.get_height()));
-	
-	if (get_format() != srfc.get_format_format()) {
-		surface converted = srfc.convert(get_format());
-		surface::lock_guard_type lock(converted);
-		return update(rr, lock.get_pixels(), lock.get_pitch());
-	}
-	surface::lock_guard_type lock(srfc);
-	return update(rr, lock.get_pixels(), lock.get_pitch());
-}
-
-texture&
-texture::update_YUV(
-	const boost::optional<rect>& r,
-	const ::Uint8* yplane,
-	const int ypitch,
-	const ::Uint8* uplane,
-	const int upitch,
-	const ::Uint8* vplane,
-	const int vpitch
-) {
-	RUNTIME_ASSERT(texture_);
-	if (::SDL_UpdateYUVTexture(
-		texture_,
-		r? (*r).get(): nullptr,
-		yplane,
-		ypitch,
-		uplane,
-		upitch,
-		vplane,
-		vpitch
-	))
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
-	return *this;
-}
-
+} // namespace:ui
 } // namespace:meck
 

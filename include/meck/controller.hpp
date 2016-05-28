@@ -70,7 +70,6 @@
 #include <boost/noncopyable.hpp>
 
 #include <meck/error.hpp>
-#include <meck/forward.hpp>
 #include <meck/keycode.hpp>
 #include <meck/reactor.hpp>
 #include <meck/typeid.hpp>
@@ -80,6 +79,9 @@
 #include <SDL.h>
 
 namespace meck {
+
+class application;
+class keycode_dispatcher;
 
 /**
  * The controller is responsible for handling application
@@ -101,7 +103,13 @@ public:
 	
 	virtual void
 	init() {
+		ui_overlay_.init();
 		name_ = demangle(typeid(*this).name());
+	}
+	
+	virtual void
+	finalize() {
+		ui_overlay_.finalize();
 	}
 	
 	virtual void

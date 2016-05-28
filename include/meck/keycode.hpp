@@ -72,7 +72,6 @@
 #include <boost/noncopyable.hpp>
 
 #include <meck/format.hpp>
-#include <meck/forward.hpp>
 
 #include <SDL.h>
 
@@ -85,6 +84,8 @@
 	/**/
 
 namespace meck {
+
+class application;
 
 typedef std::map<std::string, ::SDL_Keycode> keycode_map;
 

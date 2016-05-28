@@ -79,9 +79,17 @@
 #include <meck/tick.hpp>
 #include <meck/window.hpp>
 
+#include <meck/ui/ascii_textbox.hpp>
 #include <meck/ui/block.hpp>
 #include <meck/ui/container.hpp>
+#include <meck/ui/image.hpp>
+#include <meck/ui/label.hpp>
 #include <meck/ui/overlay.hpp>
+#include <meck/ui/text.hpp>
+#include <meck/ui/theme.hpp>
+#include <meck/ui/utf8_textbox.hpp>
+#include <meck/ui/validator.hpp>
+#include <meck/ui/widget.hpp>
 
 #endif
 

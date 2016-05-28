@@ -61,119 +61,76 @@
  *  3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <meck/renderer.hpp>
-#include <meck/surface.hpp>
-#include <meck/texture.hpp>
+#include "test_app.hpp"
 
-namespace meck {
+#include <meck/detail/test.hpp>
 
-texture::texture(
-	renderer& rndr,
-	const ::Uint32 format,
-	const int access,
-	const int w,
-	const int h
+namespace test {
+
+ui_theme_controller::ui_theme_controller(
+	meck::application& app,
+	const meck::controller_ptr& ctrlr
 )
-	: texture_(::SDL_CreateTexture(
-		rndr.get(),
-		format,
-		access,
-		w,
-		h
-	))
+	: section_controller(app, ctrlr)
+	, body_block_(ui_overlay_)
+	, widget_block_(ui_overlay_)
+	, foo_label_(ui_overlay_)
+	, foo_textbox_(ui_overlay_)
+	, bar_label_(ui_overlay_)
+	, bar_textbox_(ui_overlay_)
+	, qmark_image_(
+		ui_overlay_,
+		"resource/img/question-mark.png"
+	)
 {
-	if (!texture_)
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
-}
-
-texture::texture(
-	renderer& rndr,
-	const boost::filesystem::path& filename
-)
-	: texture_(::IMG_LoadTexture(
-		rndr.get(),
-		filename.string().c_str()
-	))
-{
-	if (!texture_)
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
-}
-
-texture::texture(
-	renderer& rndr,
-	surface& srfc
-)
-	: texture_(::SDL_CreateTextureFromSurface(
-		rndr.get(),
-		srfc.get()
-	))
-{
-	if (!texture_)
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
-}
-
-texture&
-texture::update(
-	const boost::optional<rect>& r,
-	const void* pixels,
-	const int pitch
-) {
-	RUNTIME_ASSERT(texture_);
-	if (::SDL_UpdateTexture(
-		texture_,
-		r? (*r).get(): nullptr,
-		pixels,
-		pitch
-	))
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
-	return *this;
-}
-
-texture&
-texture::update(
-	const boost::optional<rect>& r,
-	surface& srfc
-) {
-	RUNTIME_ASSERT(texture_);
+	ui_overlay_.set_root(body_block_);
 	
-	rect rr(r? *r: rect(0, 0, get_width(), get_height()));
+	body_block_.add(widget_block_);
+	widget_block_.add(foo_label_);
+	widget_block_.add(foo_textbox_);
+	widget_block_.add(bar_label_);
+	widget_block_.add(bar_textbox_);
+	body_block_.add(qmark_image_);
 	
-	rr.w(std::min(rr.w(), srfc.get_width()));
-	rr.h(std::min(rr.h(), srfc.get_height()));
+	body_block_.set_size(680, 500);
+	body_block_.center();
 	
-	if (get_format() != srfc.get_format_format()) {
-		surface converted = srfc.convert(get_format());
-		surface::lock_guard_type lock(converted);
-		return update(rr, lock.get_pixels(), lock.get_pitch());
-	}
-	surface::lock_guard_type lock(srfc);
-	return update(rr, lock.get_pixels(), lock.get_pitch());
+	widget_block_.set_border(20, 20);
+	widget_block_.set_width(384);
+	widget_block_.expand_height();
+	
+	foo_label_.set_value("Foo");
+	foo_textbox_.set_value("Bar");
+	
+	bar_label_.set_value("Bar");
+	bar_textbox_.set_value("Foo");
+	
+	qmark_image_.set_positioning(meck::ui::positioning::MANUAL);
+	qmark_image_.set_position(
+		body_block_.get_inner_rect().w()
+			- widget_block_.get_border().y()
+			- qmark_image_.get_inner_rect().w(),
+		widget_block_.get_border().y()
+	);
 }
 
-texture&
-texture::update_YUV(
-	const boost::optional<rect>& r,
-	const ::Uint8* yplane,
-	const int ypitch,
-	const ::Uint8* uplane,
-	const int upitch,
-	const ::Uint8* vplane,
-	const int vpitch
-) {
-	RUNTIME_ASSERT(texture_);
-	if (::SDL_UpdateYUVTexture(
-		texture_,
-		r? (*r).get(): nullptr,
-		yplane,
-		ypitch,
-		uplane,
-		upitch,
-		vplane,
-		vpitch
-	))
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
-	return *this;
+void
+ui_theme_controller::think() {
 }
 
-} // namespace:meck
+void
+ui_theme_controller::render() {
+	//ui_overlay_.render();
+	
+	/*
+	meck::detail::test::compare_renderer_to_file(
+		app_,
+		"test_app-data/ui_block-0.bmp",
+		"test_app-data/ui_block-0-screenshot.bmp"
+	);
+	next_controller();
+	*/
+}
+
+} // namespace:test
 

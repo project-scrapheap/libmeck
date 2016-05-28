@@ -68,7 +68,11 @@ namespace meck {
 namespace ui {
 
 #define KEY_HACK_SPEC(Key, Char) \
-	case SDLK_##Key: value_.append(Char); return true; break
+	case SDLK_##Key: \
+		value_.append(Char); \
+		rerender_ = true; \
+		return true; \
+		break
 #define KEY_HACK(Key) \
 	KEY_HACK_SPEC(Key, #Key)
 
@@ -160,8 +164,10 @@ ascii_textbox::react(
 			KEY_HACK_SPEC(KP_EQUALS, "=");
 			
 			case SDLK_BACKSPACE:
-				if (value_.size())
+				if (value_.size()) {
 					value_.pop_back();
+					rerender_ = true;
+				}
 				return true;
 			break;
 		}
@@ -174,6 +180,8 @@ ascii_textbox::react(
 
 void
 ascii_textbox::think() {
+	text::think();
+	
 	const bool focused = owner_.is_focused(*this);
 	
 	append_ = focused && static_cast<int>(
@@ -184,7 +192,7 @@ ascii_textbox::think() {
 
 void
 ascii_textbox::render() {
-	block::render();
+	text::render();
 }
 
 

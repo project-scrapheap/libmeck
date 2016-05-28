@@ -189,12 +189,19 @@ public:
 		int* pitch,
 		boost::optional<rect> r = boost::none
 	) {
-		if (::SDL_LockTexture(get(), r? (*r).get(): nullptr, pixels, pitch))
+		RUNTIME_ASSERT(texture_);
+		if (::SDL_LockTexture(
+			texture_,
+			r? (*r).get(): nullptr,
+			pixels,
+			pitch
+		))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 	}
 	
 	inline void
 	unlock() {
+		RUNTIME_ASSERT(texture_);
 		::SDL_UnlockTexture(texture_);
 	}
 	
@@ -235,6 +242,7 @@ public:
 	set_blend_mode(
 		const ::SDL_BlendMode& blend_mode = SDL_BLENDMODE_NONE
 	) {
+		RUNTIME_ASSERT(texture_);
 		if (::SDL_SetTextureBlendMode(texture_, blend_mode))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 		return *this;
@@ -244,6 +252,7 @@ public:
 	set_alpha_mod(
 		const ::Uint8 alpha = 255
 	) {
+		RUNTIME_ASSERT(texture_);
 		if (::SDL_SetTextureAlphaMod(texture_, alpha))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 		return *this;
@@ -255,6 +264,7 @@ public:
 		const ::Uint8 g = 255,
 		const ::Uint8 b = 255
 	) {
+		RUNTIME_ASSERT(texture_);
 		if (::SDL_SetTextureColorMod(texture_, r, g, b))
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 		return *this;
@@ -262,6 +272,7 @@ public:
 	
 	::Uint32
 	get_format() const {
+		RUNTIME_ASSERT(texture_);
 		::Uint32 format;
 		if (::SDL_QueryTexture(
 			texture_,
@@ -276,6 +287,7 @@ public:
 	
 	int
 	get_access() const {
+		RUNTIME_ASSERT(texture_);
 		int access;
 		if (::SDL_QueryTexture(
 			texture_,
@@ -300,6 +312,7 @@ public:
 	
 	point
 	get_size() const {
+		RUNTIME_ASSERT(texture_);
 		int w;
 		int h;
 		if (::SDL_QueryTexture(
@@ -315,6 +328,7 @@ public:
 	
 	::Uint8
 	get_alpha_mod() const {
+		RUNTIME_ASSERT(texture_);
 		::Uint8 alpha;
 		if (::SDL_GetTextureAlphaMod(texture_, &alpha) != 0)
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
@@ -323,6 +337,7 @@ public:
 	
 	::SDL_BlendMode
 	get_blend_mode() const {
+		RUNTIME_ASSERT(texture_);
 		::SDL_BlendMode mode;
 		if (::SDL_GetTextureBlendMode(texture_, &mode) != 0)
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
@@ -335,6 +350,7 @@ public:
 		::Uint8& g,
 		::Uint8& b
 	) const {
+		RUNTIME_ASSERT(texture_);
 		if (::SDL_GetTextureColorMod(texture_, &r, &g, &b) != 0)
 			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
 	}

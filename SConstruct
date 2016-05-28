@@ -82,8 +82,10 @@ env.StaticLibrary("meck", [
 	"source/ui/ascii_textbox.cpp",
 	"source/ui/block.cpp",
 	"source/ui/container.cpp",
+	"source/ui/image.cpp",
 	"source/ui/label.cpp",
 	"source/ui/overlay.cpp",
+	"source/ui/text.cpp",
 	"source/ui/theme.cpp",
 	"source/ui/utf8_textbox.cpp",
 	"source/ui/validator.cpp",
@@ -99,6 +101,7 @@ env.Program("test/test_app", [
 	"test/test_app_font.cpp",
 	"test/test_app_keycode.cpp",
 	"test/test_app_renderer.cpp",
-	"test/test_app_ui_block.cpp"
+	"test/test_app_ui_block.cpp",
+	"test/test_app_ui_theme.cpp"
 ])
 

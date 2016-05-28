@@ -64,7 +64,7 @@
 #ifndef MECK_UI_LABEL_HPP
 #define MECK_UI_LABEL_HPP
 
-#include <meck/ui/widget.hpp>
+#include <meck/ui/text.hpp>
 
 #include <SDL.h>
 
@@ -72,27 +72,30 @@ namespace meck {
 namespace ui {
 
 class label
-	: public widget
+	: public text
 {
 public:
 	explicit
 	label(
 		overlay& olay
 	)
-		: widget(olay)
+		: text(olay)
 		, for_(nullptr)
-	{}
+	{
+		render_outer_rect_ = false;
+		render_inner_rect_ = false;
+	}
+	
+	virtual void
+	finalize() {
+		set_border(owner_.get_theme().label_border);
+		text::finalize();
+	}
 	
 	virtual bool
 	react(
 		::SDL_Event& event
 	);
-	
-	virtual void
-	think();
-	
-	virtual void
-	render();
 	
 	virtual void
 	set_for() {
@@ -113,20 +116,7 @@ public:
 		return for_ == &wdg;
 	}
 	
-	virtual const std::string&
-	get_text() const {
-		return text_;
-	}
-	
-	virtual void
-	set_text(
-		const std::string& txt
-	) {
-		text_ = txt;
-	}
-	
 protected:
-	std::string text_;
 	widget* for_;
 };
 

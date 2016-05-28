@@ -65,6 +65,7 @@
 #define MECK_STRING_HPP
 
 #include <cstring>
+#include <string>
 
 #include <meck/error.hpp>
 
@@ -72,7 +73,7 @@
 
 namespace meck {
 
-::SDL_Color
+inline ::SDL_Color
 from_rgba_hex(
 	const std::string& hex
 ) {
@@ -91,7 +92,7 @@ from_rgba_hex(
 	};
 }
 
-::SDL_Color
+inline ::SDL_Color
 from_rgb_hex(
 	const std::string& hex
 ) {
