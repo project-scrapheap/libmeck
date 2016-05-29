@@ -92,16 +92,11 @@ public:
 		render_outer_rect_ = false;
 		render_inner_rect_ = false;
 		
-		auto image_size = image_texture_.get_size();
-		
-		set_size(
-			image_size.x(),
-			image_size.y()
-		);
 	}
 	
 	virtual void
 	finalize() {
+		auto image_size = image_texture_.get_size();
 		set_size(
 			outer_rect_.w() + 2 * border_size_.x(),
 			outer_rect_.h() + 2 * border_size_.y()
@@ -110,6 +105,16 @@ public:
 	
 	virtual void
 	render();
+	
+	texture&
+	get_image_texture() {
+		return image_texture_;
+	}
+	
+	const texture&
+	get_image_texture() const {
+		return image_texture_;
+	}
 	
 protected:
 	texture image_texture_;

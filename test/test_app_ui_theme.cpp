@@ -96,20 +96,23 @@ ui_theme_controller::ui_theme_controller(
 	body_block_.center();
 	
 	widget_block_.set_border(20, 20);
-	widget_block_.set_width(384);
+	widget_block_.set_width(404);
 	widget_block_.expand_height();
 	
 	foo_label_.set_value("Foo");
-	foo_textbox_.set_value("Bar");
+	foo_textbox_.set_value("bar");
 	
 	bar_label_.set_value("Bar");
-	bar_textbox_.set_value("Foo");
+	bar_textbox_.set_value("foo");
 	
+	// This could be more easily solved using a horz_container,
+	// but solving it this way allows manual positioning to be
+	// tested, which is nice.
 	qmark_image_.set_positioning(meck::ui::positioning::MANUAL);
 	qmark_image_.set_position(
 		body_block_.get_inner_rect().w()
-			- widget_block_.get_border().y()
-			- qmark_image_.get_inner_rect().w(),
+			- widget_block_.get_border().x()
+			- qmark_image_.get_image_texture().get_size().x(),
 		widget_block_.get_border().y()
 	);
 }

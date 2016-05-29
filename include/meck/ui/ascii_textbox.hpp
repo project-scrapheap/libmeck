@@ -81,7 +81,6 @@ public:
 	)
 		: text(olay)
 		, append_(' ')
-		, value_("")
 		, value_texture_(nullptr)
 	{
 		before_ = olay.get_theme().textbox_before;
@@ -110,7 +109,6 @@ public:
 	
 protected:
 	std::string::value_type append_;
-	std::string value_;
 	texture value_texture_;
 };
 

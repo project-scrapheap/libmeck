@@ -73,7 +73,7 @@ text::think() {
 		rerender_ = false;
 		value_texture_ = owner_.get_theme().normal_font.render_text_solid(
 			owner_.get_application().get_renderer(),
-			value_,
+			!value_.empty()? value_: " ",
 			owner_.get_theme().text_fg
 		);
 	}
