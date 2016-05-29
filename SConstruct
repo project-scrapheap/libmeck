@@ -81,6 +81,8 @@ env.StaticLibrary("meck", [
 	
 	"source/ui/ascii_textbox.cpp",
 	"source/ui/block.cpp",
+	"source/ui/button.cpp",
+	"source/ui/checkbox.cpp",
 	"source/ui/container.cpp",
 	"source/ui/image.cpp",
 	"source/ui/label.cpp",

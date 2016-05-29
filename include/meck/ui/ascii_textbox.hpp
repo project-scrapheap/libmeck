@@ -83,10 +83,13 @@ public:
 		, append_(' ')
 		, value_texture_(nullptr)
 	{
-		before_ = olay.get_theme().textbox_before;
-		after_ = olay.get_theme().textbox_after;
+		render_shadow_rect_ = true;
 		render_outer_rect_ = true;
 		render_inner_rect_ = false;
+		before_ = olay.get_theme().textbox_before;
+		after_ = olay.get_theme().textbox_after;
+		shadow_size_ = olay.get_theme().textbox_shadow_border;
+		shadow_color_ = olay.get_theme().textbox_shadow_bg;
 		outer_color_ = olay.get_theme().textbox_bg;
 	}
 	

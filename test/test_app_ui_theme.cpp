@@ -78,6 +78,8 @@ ui_theme_controller::ui_theme_controller(
 	, foo_textbox_(ui_overlay_)
 	, bar_label_(ui_overlay_)
 	, bar_textbox_(ui_overlay_)
+	, empty_label_(ui_overlay_)
+	, empty_textbox_(ui_overlay_)
 	, qmark_image_(
 		ui_overlay_,
 		"resource/img/question-mark.png"
@@ -90,6 +92,8 @@ ui_theme_controller::ui_theme_controller(
 	widget_block_.add(foo_textbox_);
 	widget_block_.add(bar_label_);
 	widget_block_.add(bar_textbox_);
+	widget_block_.add(empty_label_);
+	widget_block_.add(empty_textbox_);
 	body_block_.add(qmark_image_);
 	
 	body_block_.set_size(680, 500);
@@ -106,6 +110,10 @@ ui_theme_controller::ui_theme_controller(
 	bar_label_.set_value("Bar");
 	bar_label_.set_for(bar_textbox_);
 	bar_textbox_.set_value("foo");
+	
+	empty_label_.set_value("Initially empty");
+	empty_label_.set_for(empty_textbox_);
+	empty_textbox_.set_value("");
 	
 	// This could be more easily solved using a horz_container,
 	// but solving it this way allows manual positioning to be

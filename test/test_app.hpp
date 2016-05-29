@@ -261,6 +261,8 @@ protected:
 	meck::ui::ascii_textbox foo_textbox_;
 	meck::ui::label bar_label_;
 	meck::ui::ascii_textbox bar_textbox_;
+	meck::ui::label empty_label_;
+	meck::ui::ascii_textbox empty_textbox_;
 	
 	meck::ui::image qmark_image_;
 };

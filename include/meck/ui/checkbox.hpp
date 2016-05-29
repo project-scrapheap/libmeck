@@ -61,44 +61,46 @@
  *  3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <meck/application.hpp>
-#include <meck/renderer.hpp>
-#include <meck/ui/block.hpp>
+#ifndef MECK_UI_CHECKBOX_HPP
+#define MECK_UI_CHECKBOX_HPP
+
+#include <meck/ui/text.hpp>
+
+#include <SDL.h>
 
 namespace meck {
 namespace ui {
 
-static void
-render_rect(
-	renderer& rndr,
-	rect& rt,
-	const ::SDL_Color& col
-) {
-	rndr.set_draw_color(col);
-	rndr.fill_rect(rt);
-}
+class checkbox
+	: public text
+{
+public:
+	explicit
+	checkbox(
+		overlay& olay
+	)
+		: text(olay)
+	{
+		render_outer_rect_ = false;
+		render_inner_rect_ = false;
+	}
+	
+	virtual void
+	finalize() {
+		set_border(owner_.get_theme().label_border);
+		text::finalize();
+	}
+	
+	virtual bool
+	react(
+		::SDL_Event& event
+	);
+	
+};
 
-void
-block::render() {
-	auto& rndr = owner_.get_application().get_renderer();
-	
-	if (render_shadow_rect_)
-		render_rect(rndr, shadow_rect_, shadow_color_);
-	
-	if (render_outer_rect_)
-		render_rect(rndr, outer_rect_, outer_color_);
-	
-	if (render_inner_rect_)
-		render_rect(rndr, inner_rect_, inner_color_);
-	
-	rndr.set_draw_color({
-		0,
-		0,
-		0,
-		0
-	});
-}
 
 } // namespace:ui
 } // namespace:meck
+
+#endif
 

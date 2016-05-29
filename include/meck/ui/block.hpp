@@ -100,8 +100,10 @@ public:
 		, positioning_(positioning::AUTOMATIC)
 		, before_(0)
 		, after_(0)
+		, render_shadow_rect_(false)
 		, render_outer_rect_(false)
 		, render_inner_rect_(true)
+		, shadow_color_ {0, 0, 0, 0}
 		, outer_color_ {0, 0, 0, 0}
 		, inner_color_ {0, 0, 0, 0}
 		, background_(nullptr)
@@ -191,6 +193,16 @@ public:
 	}
 	
 	virtual rect
+	get_shadow_rect() {
+		return shadow_rect_;
+	}
+	
+	virtual const rect&
+	get_shadow_rect() const {
+		return shadow_rect_;
+	}
+	
+	virtual rect
 	get_outer_rect() {
 		return outer_rect_;
 	}
@@ -230,7 +242,7 @@ public:
 		outer_size_ = outer;
 		outer_rect_.w(outer_size_.x());
 		outer_rect_.h(outer_size_.y());
-		update_inner_rect();
+		update_dependent_rects();
 		return *this;
 	}
 	
@@ -302,7 +314,7 @@ public:
 		const point& border
 	) {
 		border_size_ = border;
-		update_inner_rect();
+		update_dependent_rects();
 		return *this;
 	}
 	
@@ -328,7 +340,7 @@ public:
 			outer_rect_.x(pos.x());
 			outer_rect_.y(pos.y());
 		}
-		update_inner_rect();
+		update_dependent_rects();
 		return *this;
 	}
 	
@@ -378,11 +390,16 @@ public:
 	
 protected:
 	virtual void
-	update_inner_rect() {
+	update_dependent_rects() {
 		inner_rect_.x(outer_rect_.x() + border_size_.x());
 		inner_rect_.y(outer_rect_.y() + border_size_.y());
 		inner_rect_.w(outer_rect_.w() - 2 * border_size_.x());
 		inner_rect_.h(outer_rect_.h() - 2 * border_size_.y());
+		
+		shadow_rect_.x(outer_rect_.x() - shadow_size_.x());
+		shadow_rect_.y(outer_rect_.y() - shadow_size_.y());
+		shadow_rect_.w(outer_rect_.w() + 2 * shadow_size_.x());
+		shadow_rect_.h(outer_rect_.h() + 2 * shadow_size_.y());
 	}
 	
 	overlay& owner_;
@@ -395,13 +412,17 @@ protected:
 	
 	point outer_size_;
 	point border_size_;
+	point shadow_size_;
 	
+	rect shadow_rect_;
 	rect outer_rect_;
 	rect inner_rect_;
 	
+	bool render_shadow_rect_;
 	bool render_outer_rect_;
 	bool render_inner_rect_;
 	
+	::SDL_Color shadow_color_;
 	::SDL_Color outer_color_;
 	::SDL_Color inner_color_;
 	

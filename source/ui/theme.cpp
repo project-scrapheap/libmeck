@@ -78,15 +78,20 @@ theme::theme(
 	, bold_font(nullptr)
 	, italic_font_pts(16)
 	, italic_font(nullptr)
+	, button_border(5, 5)
+	, checkbox_border(0, 5)
 	, label_border(0, 5)
 	, textbox_border(5, 5)
+	, textbox_shadow_border(1, 1)
 	, textbox_before(0)
 	, textbox_after(5)
-	, bg {211, 211, 211, 255}
-	, container_bg {62, 62, 62, 255}
-	, text_fg {183, 183, 183, 255}
-	, textbox_bg {86, 86, 86, 255}
-	, textbox_focus_bg {36, 36, 36, 255}
+	, text_fg {85, 85, 85, 255}
+	, bg {240, 240, 240, 255}
+	, container_bg {240, 240, 240, 255}
+	, button_bg {200, 200, 200, 255}
+	, textbox_bg {234, 234, 234, 255}
+	, textbox_focus_bg {250, 250, 250, 255}
+	, textbox_shadow_bg {195, 195, 195, 255}
 {}
 
 void

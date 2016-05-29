@@ -100,19 +100,26 @@ public:
 	int italic_font_pts;
 	font italic_font;
 	
+	point button_border;
+	point button_shadow_border;
+	point checkbox_border;
 	point label_border;
 	point textbox_border;
+	point textbox_shadow_border;
 	
 	int textbox_before;
 	int textbox_after;
 	
+	::SDL_Color text_fg;
+	
 	::SDL_Color bg;
 	::SDL_Color container_bg;
 	
-	::SDL_Color text_fg;
+	::SDL_Color button_bg;
 	
 	::SDL_Color textbox_bg;
 	::SDL_Color textbox_focus_bg;
+	::SDL_Color textbox_shadow_bg;
 };
 
 } // namespace:ui
