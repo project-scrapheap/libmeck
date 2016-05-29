@@ -80,10 +80,11 @@ bool
 ascii_textbox::react(
 	::SDL_Event& event
 ) {
-	if (test_clicked(*this, event, SDL_BUTTON_LEFT)) {
+	if (test_clicked(outer_rect_, event, SDL_BUTTON_LEFT)) {
 		owner_.set_focused(*this);
 		return true;
 	} else if (event.type == SDL_KEYDOWN && owner_.is_focused(*this)) {
+		
 		switch (event.key.keysym.sym) {
 			KEY_HACK(a);
 			KEY_HACK(b);
@@ -170,6 +171,12 @@ ascii_textbox::react(
 				}
 				return true;
 			break;
+			
+			default:
+				value_.append("?");
+				rerender_ = true;
+				return true;
+			break;
 		}
 	}
 	return false;
@@ -183,6 +190,10 @@ ascii_textbox::think() {
 	text::think();
 	
 	const bool focused = owner_.is_focused(*this);
+	
+	outer_color_ = focused?
+		owner_.get_theme().textbox_focus_bg:
+		owner_.get_theme().textbox_bg;
 	
 	append_ = focused && static_cast<int>(
 		owner_.get_application().get_timer().total_sec()

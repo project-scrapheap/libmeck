@@ -71,7 +71,7 @@ bool
 label::react(
 	::SDL_Event& event
 ) {
-	if (for_ && test_clicked(*this, event, SDL_BUTTON_LEFT)) {
+	if (for_ && test_clicked(outer_rect_, event, SDL_BUTTON_LEFT)) {
 		owner_.set_focused(*for_);
 		return true;
 	}

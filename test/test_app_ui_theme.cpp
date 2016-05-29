@@ -100,9 +100,11 @@ ui_theme_controller::ui_theme_controller(
 	widget_block_.expand_height();
 	
 	foo_label_.set_value("Foo");
+	foo_label_.set_for(foo_textbox_);
 	foo_textbox_.set_value("bar");
 	
 	bar_label_.set_value("Bar");
+	bar_label_.set_for(bar_textbox_);
 	bar_textbox_.set_value("foo");
 	
 	// This could be more easily solved using a horz_container,

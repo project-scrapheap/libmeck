@@ -92,11 +92,11 @@ protected:
 
 inline bool
 test_hover(
-	const widget& wdg,
+	const rect& area,
 	const ::SDL_Event& event
 ) {
 	const point mouse(event.button.x, event.button.y);
-	return wdg.get_inner_rect().contains(mouse) && (
+	return area.contains(mouse) && (
 		event.type == SDL_MOUSEBUTTONDOWN ||
 		event.type == SDL_MOUSEMOTION
 	);
@@ -104,11 +104,11 @@ test_hover(
 
 inline bool
 test_clicked(
-	const widget& wdg,
+	const rect& area,
 	const::SDL_Event& event,
 	const ::Uint8 button
 ) {
-	return test_hover(wdg, event) &&
+	return test_hover(area, event) &&
 		event.type == SDL_MOUSEBUTTONDOWN &&
 		event.button.button == button;
 }
