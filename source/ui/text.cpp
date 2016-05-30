@@ -83,10 +83,32 @@ void
 text::render() {
 	block::render();
 	if (value_texture_.get()) {
+		point dest;
+		
+		switch (alignment_)
+		{
+			case alignment::LEFT:
+				dest = inner_rect_.get_top_left();
+				break;
+			case alignment::RIGHT:
+				dest = inner_rect_.get_top_right() - point(
+					value_texture_.get_size().x(),
+					0
+				);
+				break;
+			case alignment::CENTER:
+				dest = point(
+					inner_rect_.centroid().x()
+						- value_texture_.get_size().x() / 2,
+					inner_rect_.y()
+				);
+				break;
+		};
+		
 		owner_.get_application().get_renderer().copy(
 			value_texture_,
 			boost::none,
-			inner_rect_.get_top_left()
+			dest
 		);
 	}
 }

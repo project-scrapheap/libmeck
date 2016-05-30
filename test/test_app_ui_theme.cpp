@@ -74,12 +74,29 @@ ui_theme_controller::ui_theme_controller(
 	: section_controller(app, ctrlr)
 	, body_block_(ui_overlay_)
 	, widget_block_(ui_overlay_)
+	, buttons_block_(ui_overlay_)
 	, foo_label_(ui_overlay_)
 	, foo_textbox_(ui_overlay_)
 	, bar_label_(ui_overlay_)
 	, bar_textbox_(ui_overlay_)
 	, empty_label_(ui_overlay_)
 	, empty_textbox_(ui_overlay_)
+	, ok_button_(
+		ui_overlay_,
+		boost::bind(
+			&ui_theme_controller::ok_action,
+			this,
+			_1
+		)
+	)
+	, cancel_button_(
+		ui_overlay_,
+		boost::bind(
+			&ui_theme_controller::cancel_action,
+			this,
+			_1
+		)
+	)
 	, qmark_image_(
 		ui_overlay_,
 		"resource/img/question-mark.png"
@@ -88,13 +105,18 @@ ui_theme_controller::ui_theme_controller(
 	ui_overlay_.set_root(body_block_);
 	
 	body_block_.add(widget_block_);
+	body_block_.add(qmark_image_);
+	
 	widget_block_.add(foo_label_);
 	widget_block_.add(foo_textbox_);
 	widget_block_.add(bar_label_);
 	widget_block_.add(bar_textbox_);
 	widget_block_.add(empty_label_);
 	widget_block_.add(empty_textbox_);
-	body_block_.add(qmark_image_);
+	widget_block_.add(buttons_block_);
+	
+	buttons_block_.add(ok_button_);
+	buttons_block_.add(cancel_button_);
 	
 	body_block_.set_size(680, 500);
 	body_block_.center();
@@ -115,10 +137,23 @@ ui_theme_controller::ui_theme_controller(
 	empty_label_.set_for(empty_textbox_);
 	empty_textbox_.set_value("");
 	
+	// This is a horz container, so the height is automatically
+	// set to that of the biggest child if it is not otherwise
+	// specified.
+	buttons_block_.expand_width();
+	
+	ok_button_.set_width(172);
+	ok_button_.set_after(10);
+	ok_button_.set_value("Ok");
+	
+	cancel_button_.set_width(172);
+	cancel_button_.set_before(10);
+	cancel_button_.set_value("Cancel");
+	
 	// This could be more easily solved using a horz_container,
 	// but solving it this way allows manual positioning to be
 	// tested, which is nice.
-	qmark_image_.set_positioning(meck::ui::positioning::MANUAL);
+	qmark_image_.set_positioning(meck::ui::block::positioning::MANUAL);
 	qmark_image_.set_position(
 		body_block_.get_inner_rect().w()
 			- widget_block_.get_border().x()

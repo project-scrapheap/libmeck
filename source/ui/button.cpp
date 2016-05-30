@@ -70,6 +70,16 @@ bool
 button::react(
 	::SDL_Event& event
 ) {
+	const bool hovered = test_hover(outer_rect_, event);
+	
+	outer_color_ = hovered?
+		owner_.get_theme().button_focus_bg:
+		owner_.get_theme().button_bg;
+	
+	shadow_color_ = hovered?
+		owner_.get_theme().button_shadow_focus_bg:
+		owner_.get_theme().button_shadow_bg;
+	
 	if (test_clicked(outer_rect_, event, SDL_BUTTON_LEFT)) {
 		return action_(event);
 	}

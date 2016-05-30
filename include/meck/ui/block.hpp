@@ -80,17 +80,17 @@
 namespace meck {
 namespace ui {
 
-enum class positioning
-{
-	AUTOMATIC,
-	MANUAL
-};
-
 class block
 	: private boost::noncopyable
 	, public reactor
 {
 public:
+	enum class positioning
+	{
+		AUTOMATIC,
+		MANUAL
+	};
+	
 	explicit
 	block(
 		overlay& olay
@@ -258,7 +258,7 @@ public:
 	set_width(
 		const int w
 	) {
-		return set_size(point(w, get_parent_rect().h()));
+		return set_size(point(w, outer_rect_.h()));
 	}
 	
 	virtual block&
@@ -283,7 +283,7 @@ public:
 	set_height(
 		const int h
 	) {
-		return set_size(point(get_parent_rect().w(), h));
+		return set_size(point(outer_rect_.w(), h));
 	}
 	
 	virtual block&

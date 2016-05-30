@@ -255,14 +255,35 @@ public:
 	render();
 	
 protected:
+	virtual bool
+	ok_action(
+		::SDL_Event&
+	) {
+		return true;
+	}
+	
+	virtual bool
+	cancel_action(
+		::SDL_Event&
+	) {
+		return true;
+	}
+	
 	meck::ui::vert_container body_block_;
 	meck::ui::vert_container widget_block_;
+	meck::ui::horz_container buttons_block_;
+	
 	meck::ui::label foo_label_;
 	meck::ui::ascii_textbox foo_textbox_;
+	
 	meck::ui::label bar_label_;
 	meck::ui::ascii_textbox bar_textbox_;
+	
 	meck::ui::label empty_label_;
 	meck::ui::ascii_textbox empty_textbox_;
+	
+	meck::ui::button ok_button_;
+	meck::ui::button cancel_button_;
 	
 	meck::ui::image qmark_image_;
 };

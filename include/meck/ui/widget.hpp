@@ -65,6 +65,7 @@
 #define MECK_UI_WIDGET_HPP
 
 #include <meck/ui/block.hpp>
+#include <meck/ui/validator.hpp>
 
 #include <SDL.h>
 
@@ -86,8 +87,28 @@ public:
 	virtual std::string
 	get_value() = 0;
 	
+	virtual const std::string&
+	get_value() const = 0;
+	
+	virtual void
+	add_validator(
+		validator* valdtr
+	) {
+		validators_.push_back(validator_ptr(valdtr));
+	}
+	
+	virtual bool
+	validate() {
+		for (auto it : validators_) {
+			if (!(*it)(get_value()))
+				return false;
+		}
+		return true;
+	}
+	
 protected:
 	bool rerender_;
+	validator_vector validators_;
 };
 
 inline bool

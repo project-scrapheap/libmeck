@@ -79,19 +79,26 @@ theme::theme(
 	, italic_font_pts(16)
 	, italic_font(nullptr)
 	, button_border(5, 5)
+	, button_shadow_border(1, 1)
 	, checkbox_border(0, 5)
 	, label_border(0, 5)
 	, textbox_border(5, 5)
 	, textbox_shadow_border(1, 1)
+	, button_before(0)
+	, button_after(5)
 	, textbox_before(0)
 	, textbox_after(5)
 	, text_fg {85, 85, 85, 255}
 	, bg {240, 240, 240, 255}
 	, container_bg {240, 240, 240, 255}
 	, button_bg {200, 200, 200, 255}
+	, button_focus_bg {222, 222, 222, 255}
+	, button_shadow_bg {128, 128, 128, 255}
+	, button_shadow_focus_bg {240, 130, 100, 255}
 	, textbox_bg {234, 234, 234, 255}
 	, textbox_focus_bg {250, 250, 250, 255}
 	, textbox_shadow_bg {195, 195, 195, 255}
+	, textbox_shadow_focus_bg {240, 130, 100, 255}
 {}
 
 void

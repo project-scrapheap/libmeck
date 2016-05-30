@@ -63,13 +63,17 @@
 
 #include "test_app.hpp"
 
+#define CATCH_CONFIG_MAIN
 #include <catch.hpp>
 
 namespace test {
 
 } // namespace:test
 
-APPLICATION_DEFAULT(test_app, test::queue_controller)
+APPLICATION_DEFAULT(
+	test_app,
+	test::queue_controller
+)
 
 TEST_CASE(
 	"test_app",
@@ -82,14 +86,5 @@ TEST_CASE(
 	auto app_exit = meck::run<test_app>(argc, argv, opt_vm);
 	
 	REQUIRE(app_exit == EXIT_SUCCESS);
-}
-
-int
-OS_MAIN(
-	argc,
-	argv
-) {
-	return Catch::Session().run(argc, argv)?
-		EXIT_FAILURE: EXIT_SUCCESS;
 }
 

@@ -107,6 +107,9 @@ public:
 	point textbox_border;
 	point textbox_shadow_border;
 	
+	int button_before;
+	int button_after;
+	
 	int textbox_before;
 	int textbox_after;
 	
@@ -116,10 +119,14 @@ public:
 	::SDL_Color container_bg;
 	
 	::SDL_Color button_bg;
+	::SDL_Color button_focus_bg;
+	::SDL_Color button_shadow_bg;
+	::SDL_Color button_shadow_focus_bg;
 	
 	::SDL_Color textbox_bg;
 	::SDL_Color textbox_focus_bg;
 	::SDL_Color textbox_shadow_bg;
+	::SDL_Color textbox_shadow_focus_bg;
 };
 
 } // namespace:ui

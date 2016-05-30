@@ -80,15 +80,12 @@ public:
 		overlay& olay
 	)
 		: text(olay)
+		, checked_(false)
 	{
 		render_outer_rect_ = false;
 		render_inner_rect_ = false;
-	}
-	
-	virtual void
-	finalize() {
+		
 		set_border(owner_.get_theme().label_border);
-		text::finalize();
 	}
 	
 	virtual bool
@@ -96,6 +93,8 @@ public:
 		::SDL_Event& event
 	);
 	
+protected:
+	bool checked_;
 };
 
 

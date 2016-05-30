@@ -81,6 +81,8 @@
 
 #include <meck/ui/ascii_textbox.hpp>
 #include <meck/ui/block.hpp>
+#include <meck/ui/button.hpp>
+#include <meck/ui/checkbox.hpp>
 #include <meck/ui/container.hpp>
 #include <meck/ui/image.hpp>
 #include <meck/ui/label.hpp>

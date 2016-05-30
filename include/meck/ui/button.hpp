@@ -89,14 +89,17 @@ public:
 		: text(olay)
 		, action_(action)
 	{
+		render_shadow_rect_ = true;
 		render_outer_rect_ = true;
 		render_inner_rect_ = false;
-	}
-	
-	virtual void
-	finalize() {
-		set_border(owner_.get_theme().label_border);
-		text::finalize();
+		before_ = olay.get_theme().button_before;
+		after_ = olay.get_theme().button_after;
+		shadow_size_ = olay.get_theme().button_shadow_border;
+		shadow_color_ = olay.get_theme().button_shadow_bg;
+		outer_color_ = olay.get_theme().button_bg;
+		alignment_ = text::alignment::CENTER;
+		
+		set_border(owner_.get_theme().button_border);
 	}
 	
 	virtual bool

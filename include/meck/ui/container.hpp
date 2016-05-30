@@ -172,6 +172,7 @@ public:
 	
 	virtual void
 	finalize() {
+		int max_width = 0;
 		point relative(inner_rect_.x(), inner_rect_.y());
 		for (auto it : children_) {
 			if (it->get_positioning() == positioning::MANUAL) {
@@ -183,9 +184,16 @@ public:
 				it->finalize();
 				relative.y(relative.y()
 					+ it->get_outer_rect().h()
-					+ it->get_after());
+					+ it->get_after()
+				);
+				max_width = std::max(
+					max_width,
+					it->get_outer_rect().w()
+				);
 			}
 		}
+		if (!outer_rect_.w())
+			set_width(max_width);
 	}
 	
 };
@@ -203,6 +211,7 @@ public:
 	
 	virtual void
 	finalize() {
+		int max_height = 0;
 		point relative(inner_rect_.x(), inner_rect_.y());
 		for (auto it : children_) {
 			if (it->get_positioning() == positioning::MANUAL) {
@@ -214,9 +223,16 @@ public:
 				it->finalize();
 				relative.x(relative.x()
 					+ it->get_outer_rect().w()
-					+ it->get_after());
+					+ it->get_after()
+				);
+				max_height = std::max(
+					max_height,
+					it->get_outer_rect().h()
+				);
 			}
 		}
+		if (!outer_rect_.h())
+			set_height(max_height);
 	}
 	
 };

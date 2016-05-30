@@ -195,6 +195,10 @@ ascii_textbox::think() {
 		owner_.get_theme().textbox_focus_bg:
 		owner_.get_theme().textbox_bg;
 	
+	shadow_color_ = focused?
+		owner_.get_theme().textbox_shadow_focus_bg:
+		owner_.get_theme().textbox_shadow_bg;
+	
 	append_ = focused && static_cast<int>(
 		owner_.get_application().get_timer().total_sec()
 	) % 2 == 0? '_': ' ';

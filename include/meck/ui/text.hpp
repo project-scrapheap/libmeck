@@ -76,20 +76,32 @@ class text
 	: public widget
 {
 public:
+	enum class alignment
+	{
+		LEFT,
+		RIGHT,
+		CENTER
+	};
+	
 	explicit
 	text(
 		overlay& olay
 	)
 		: widget(olay)
 		, value_("")
+		, alignment_(alignment::LEFT)
 		, value_texture_(nullptr)
 	{}
 	
 	virtual void
 	finalize() {
-		expand_width();
-		set_height(owner_.get_theme().normal_font.get_height()
-			+ 2 * border_size_.y());
+		if (!outer_rect_.w()) {
+			expand_width();
+		}
+		if (!outer_rect_.h()) {
+			set_height(owner_.get_theme().normal_font.get_height()
+				+ 2 * border_size_.y());
+		}
 	}
 	
 	virtual void
@@ -103,6 +115,11 @@ public:
 		return value_;
 	}
 	
+	virtual const std::string&
+	get_value() const {
+		return value_;
+	}
+	
 	virtual void
 	set_value(
 		const std::string& txt
@@ -111,9 +128,23 @@ public:
 		rerender_ = true;
 	}
 	
+	virtual const alignment&
+	get_alignment() const {
+		return alignment_;
+	}
+	
+	virtual void
+	set_alignment(
+		const alignment& align
+	) {
+		alignment_ = align;
+	}
+	
 protected:
 	std::string value_;
+	alignment alignment_;
 	texture value_texture_;
+	
 };
 
 } // namespace:ui

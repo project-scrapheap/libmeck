@@ -33,7 +33,6 @@ env = Environment(
 		"-Wextra",
 		"-std=c++14",
 		"-D_FILE_OFFSET_BITS=64",
-		"-DCATCH_CONFIG_RUNNER",
 		GetOptimize()
 	])
 )

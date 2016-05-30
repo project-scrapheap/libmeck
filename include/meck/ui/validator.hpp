@@ -64,8 +64,9 @@
 #ifndef MECK_UI_VALIDATOR_HPP
 #define MECK_UI_VALIDATOR_HPP
 
-#include <boost/noncopyable.hpp>
-#include <boost/optional.hpp>
+#include <memory>
+#include <vector>
+
 #include <boost/regex.hpp>
 
 #include <SDL.h>
@@ -85,6 +86,9 @@ public:
 		const std::string& value
 	) = 0;
 };
+
+typedef std::shared_ptr<validator> validator_ptr;
+typedef std::vector<validator_ptr> validator_vector;
 
 class regex_validator :
 	public validator
