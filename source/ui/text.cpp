@@ -105,7 +105,13 @@ text::render() {
 				break;
 		};
 		
-		owner_.get_application().get_renderer().copy(
+		auto& rndr = owner_.get_application().get_renderer();
+		
+		renderer::clip_guard_type clip_guard(
+			rndr,
+			inner_rect_
+		);
+		rndr.copy(
 			value_texture_,
 			boost::none,
 			dest

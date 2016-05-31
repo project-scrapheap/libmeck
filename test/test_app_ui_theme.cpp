@@ -183,16 +183,14 @@ ui_theme_controller::think() {
 
 void
 ui_theme_controller::render() {
-	//ui_overlay_.render();
+	ui_overlay_.render();
 	
-	/*
 	meck::detail::test::compare_renderer_to_file(
 		app_,
-		"test_app-data/ui_block-0.bmp",
-		"test_app-data/ui_block-0-screenshot.bmp"
+		"test_app-data/ui_theme-0.bmp",
+		"test_app-data/ui_theme-0-screenshot.bmp"
 	);
 	next_controller();
-	*/
 }
 
 } // namespace:test
