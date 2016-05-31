@@ -69,7 +69,7 @@ namespace ui {
 
 #define KEY_HACK_SPEC(Key, Char) \
 	case SDLK_##Key: \
-		value_.append(Char); \
+		bare_value_.append(Char); \
 		rerender_ = true; \
 		return true; \
 		break
@@ -83,8 +83,10 @@ ascii_textbox::react(
 	if (test_clicked(outer_rect_, event, SDL_BUTTON_LEFT)) {
 		owner_.set_focused(*this);
 		return true;
-	} else if (event.type == SDL_KEYDOWN && owner_.is_focused(*this)) {
-		
+	} else if (
+		event.type == SDL_KEYDOWN &&
+		owner_.is_focused(*this)
+	) {
 		switch (event.key.keysym.sym) {
 			KEY_HACK(a);
 			KEY_HACK(b);
@@ -165,15 +167,15 @@ ascii_textbox::react(
 			KEY_HACK_SPEC(KP_EQUALS, "=");
 			
 			case SDLK_BACKSPACE:
-				if (value_.size()) {
-					value_.pop_back();
+				if (bare_value_.size()) {
+					bare_value_.pop_back();
 					rerender_ = true;
 				}
 				return true;
 			break;
 			
 			default:
-				value_.append("?");
+				bare_value_.append("?");
 				rerender_ = true;
 				return true;
 			break;
@@ -187,8 +189,6 @@ ascii_textbox::react(
 
 void
 ascii_textbox::think() {
-	text::think();
-	
 	const bool focused = owner_.is_focused(*this);
 	
 	outer_color_ = focused?
@@ -199,10 +199,20 @@ ascii_textbox::think() {
 		owner_.get_theme().textbox_shadow_focus_bg:
 		owner_.get_theme().textbox_shadow_bg;
 	
-	append_ = focused && static_cast<int>(
+	bool even = static_cast<int>(
 		owner_.get_application().get_timer().total_sec()
-	) % 2 == 0? '_': ' ';
-
+	) % 2 == 0;
+	
+	append_ = focused && even? '_': ' ';
+	
+	if (first_time_ || even != append_state_) {
+		rerender_ = true;
+		first_time_ = false;
+		append_state_ = even;
+		value_ = bare_value_ + append_;
+	}
+	
+	text::think();
 }
 
 void

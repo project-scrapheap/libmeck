@@ -85,7 +85,32 @@ public:
 		render_outer_rect_ = false;
 		render_inner_rect_ = false;
 		
-		set_border(owner_.get_theme().label_border);
+		set_border(owner_.get_theme().checkbox_border);
+	}
+	
+	virtual void
+	finalize() {
+		text::finalize();
+		
+		box_rect_.x(inner_rect_.x());
+		box_rect_.y(inner_rect_.y());
+		check_rect_.x(inner_rect_.x() + 2);
+		check_rect_.y(inner_rect_.y() + 2);
+		shadow_rect_.x(inner_rect_.x() - 1);
+		shadow_rect_.y(inner_rect_.y() - 1);
+		
+		const int side = owner_.get_theme().normal_font.get_height();
+		const int space = side + side / 2;
+		
+		set_position(outer_rect_.x() + space, outer_rect_.y());
+		set_width(outer_rect_.w() - space);
+		
+		box_rect_.w(side);
+		box_rect_.h(side);
+		check_rect_.w(side - 4);
+		check_rect_.h(side - 4);
+		shadow_rect_.w(side + 2);
+		shadow_rect_.h(side + 2);
 	}
 	
 	virtual bool
@@ -93,7 +118,56 @@ public:
 		::SDL_Event& event
 	);
 	
+	virtual void
+	think();
+	
+	virtual void
+	render();
+	
+	virtual std::string
+	get_value() {
+		return checked_str_;
+	}
+	
+	virtual const std::string&
+	get_value() const {
+		return checked_str_;
+	}
+	
+	virtual void
+	set_value(
+		const std::string& txt
+	) {
+		if (!(txt.size() == 1 && (txt[0] == '1' || txt[0] == '0')))
+			RUNTIME_ERROR("invalid value %1%, should be \"1\" or \"0\"", txt);
+		checked_ = txt[0] == '1';
+		checked_str_ = txt;
+		rerender_ = true;
+	}
+	
+	virtual std::string
+	get_label() {
+		return value_;
+	}
+	
+	virtual const std::string&
+	get_label() const {
+		return value_;
+	}
+	
+	virtual void
+	set_label(
+		const std::string& label
+	) {
+		value_ = label;
+		rerender_ = true;
+	}
+	
 protected:
+	rect box_rect_;
+	rect check_rect_;
+	rect shadow_rect_;
+	std::string checked_str_;
 	bool checked_;
 };
 

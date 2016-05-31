@@ -61,10 +61,45 @@
  *  3. This notice may not be removed or altered from any source distribution.
  */
 
+#include <meck/application.hpp>
 #include <meck/ui/checkbox.hpp>
 
 namespace meck {
 namespace ui {
+
+bool
+checkbox::react(
+	::SDL_Event& event
+) {
+	if (test_clicked(outer_rect_, event, SDL_BUTTON_LEFT)) {
+		checked_ = !checked_;
+		return true;
+	}
+	return false;
+}
+
+void
+checkbox::think() {
+	text::think();
+}
+
+void
+checkbox::render() {
+	text::render();
+	
+	auto& rndr = owner_.get_application().get_renderer();
+	
+	rndr.set_draw_color(owner_.get_theme().checkbox_shadow_bg);
+	rndr.fill_rect(shadow_rect_);
+	
+	rndr.set_draw_color(owner_.get_theme().checkbox_bg);
+	rndr.fill_rect(box_rect_);
+	
+	if (checked_) {
+		rndr.set_draw_color(owner_.get_theme().checkbox_focus_bg);
+		rndr.fill_rect(check_rect_);
+	}
+}
 
 } // namespace:ui
 } // namespace:meck

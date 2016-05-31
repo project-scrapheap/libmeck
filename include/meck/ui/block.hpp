@@ -388,6 +388,27 @@ public:
 		after_ = after;
 	}
 	
+	void
+	set_render_shadow_rect(
+		const bool v
+	) {
+		render_shadow_rect_ = v;
+	}
+	
+	void
+	set_render_outer_rect(
+		const bool v
+	) {
+		render_outer_rect_ = v;
+	}
+	
+	void
+	set_render_inner_rect(
+		const bool v
+	) {
+		render_inner_rect_ = v;
+	}
+	
 protected:
 	virtual void
 	update_dependent_rects() {

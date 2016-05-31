@@ -81,7 +81,8 @@ public:
 	)
 		: text(olay)
 		, append_(' ')
-		, value_texture_(nullptr)
+		, append_state_(true)
+		, first_time_(true)
 	{
 		render_shadow_rect_ = true;
 		render_outer_rect_ = true;
@@ -91,11 +92,12 @@ public:
 		shadow_size_ = olay.get_theme().textbox_shadow_border;
 		shadow_color_ = olay.get_theme().textbox_shadow_bg;
 		outer_color_ = olay.get_theme().textbox_bg;
+		
+		set_border(owner_.get_theme().textbox_border);
 	}
 	
 	virtual void
 	finalize() {
-		set_border(owner_.get_theme().textbox_border);
 		text::finalize();
 	}
 	
@@ -110,9 +112,19 @@ public:
 	virtual void
 	render();
 	
+	virtual void
+	set_value(
+		const std::string& txt
+	) {
+		bare_value_ = txt;
+		rerender_ = true;
+	}
+	
 protected:
 	std::string::value_type append_;
-	texture value_texture_;
+	std::string bare_value_;
+	bool append_state_;
+	bool first_time_;
 };
 
 } // namespace:ui

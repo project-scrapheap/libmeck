@@ -282,6 +282,11 @@ protected:
 	meck::ui::label empty_label_;
 	meck::ui::ascii_textbox empty_textbox_;
 	
+	meck::ui::checkbox accept_checkbox_;
+	meck::ui::checkbox extra_checkbox_;
+	
+	meck::ui::block button_space_;
+	
 	meck::ui::button ok_button_;
 	meck::ui::button cancel_button_;
 	

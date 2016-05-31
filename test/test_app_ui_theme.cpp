@@ -81,6 +81,9 @@ ui_theme_controller::ui_theme_controller(
 	, bar_textbox_(ui_overlay_)
 	, empty_label_(ui_overlay_)
 	, empty_textbox_(ui_overlay_)
+	, accept_checkbox_(ui_overlay_)
+	, extra_checkbox_(ui_overlay_)
+	, button_space_(ui_overlay_)
 	, ok_button_(
 		ui_overlay_,
 		boost::bind(
@@ -113,6 +116,9 @@ ui_theme_controller::ui_theme_controller(
 	widget_block_.add(bar_textbox_);
 	widget_block_.add(empty_label_);
 	widget_block_.add(empty_textbox_);
+	widget_block_.add(accept_checkbox_);
+	widget_block_.add(extra_checkbox_);
+	widget_block_.add(button_space_);
 	widget_block_.add(buttons_block_);
 	
 	buttons_block_.add(ok_button_);
@@ -136,6 +142,15 @@ ui_theme_controller::ui_theme_controller(
 	empty_label_.set_value("Initially empty");
 	empty_label_.set_for(empty_textbox_);
 	empty_textbox_.set_value("");
+	
+	button_space_.expand_width();
+	button_space_.set_height(20);
+	button_space_.set_render_inner_rect(false);
+	
+	accept_checkbox_.set_label("I accept something");
+	
+	extra_checkbox_.set_label("Initially checked");
+	extra_checkbox_.set_value("1");
 	
 	// This is a horz container, so the height is automatically
 	// set to that of the biggest child if it is not otherwise
