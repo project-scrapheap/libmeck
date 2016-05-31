@@ -61,38 +61,84 @@
  *  3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef MECK_HPP
-#define MECK_HPP
+#ifndef MECK_LIB_HPP
+#define MECK_LIB_HPP
 
-#include <meck/application.hpp>
-#include <meck/controller.hpp>
-#include <meck/environment.hpp>
 #include <meck/error.hpp>
-#include <meck/file.hpp>
-#include <meck/font.hpp>
-#include <meck/format.hpp>
-#include <meck/keycode.hpp>
-#include <meck/lib.hpp>
-#include <meck/reactor.hpp>
-#include <meck/renderer.hpp>
-#include <meck/surface.hpp>
-#include <meck/texture.hpp>
-#include <meck/tick.hpp>
-#include <meck/window.hpp>
 
-#include <meck/ui/ascii_textbox.hpp>
-#include <meck/ui/block.hpp>
-#include <meck/ui/button.hpp>
-#include <meck/ui/checkbox.hpp>
-#include <meck/ui/container.hpp>
-#include <meck/ui/image.hpp>
-#include <meck/ui/label.hpp>
-#include <meck/ui/overlay.hpp>
-#include <meck/ui/text.hpp>
-#include <meck/ui/theme.hpp>
-#include <meck/ui/utf8_textbox.hpp>
-#include <meck/ui/validator.hpp>
-#include <meck/ui/widget.hpp>
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include <SDL_mixer.h>
+
+namespace meck {
+
+class scoped_sdl
+	: private boost::noncopyable
+{
+public:
+	explicit
+	scoped_sdl(
+		const ::Uint32 sdl_flags
+	) {
+		if (::SDL_Init(sdl_flags) < 0)
+			RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
+	}
+	
+	~scoped_sdl() noexcept {
+		::SDL_Quit();
+	}
+};
+
+class scoped_img
+	: private boost::noncopyable
+{
+public:
+	explicit
+	scoped_img(
+		const ::Uint32 img_flags
+	) {
+		if (::IMG_Init(img_flags) < 0)
+			RUNTIME_ERROR("IMG: %s", ::IMG_GetError());
+	}
+	
+	~scoped_img() noexcept {
+		::IMG_Quit();
+	}
+};
+
+class scoped_ttf
+	: private boost::noncopyable
+{
+public:
+	scoped_ttf() {
+		if (::TTF_Init() < 0)
+			RUNTIME_ERROR("TTF: %s", ::TTF_GetError());
+	}
+	
+	~scoped_ttf() noexcept {
+		::TTF_Quit();
+	}
+};
+
+class scoped_mix
+	: private boost::noncopyable
+{
+public:
+	scoped_mix() {
+		const int oa_freq = MIX_DEFAULT_FREQUENCY;
+		const int oa_format = MIX_DEFAULT_FORMAT;
+		if (::Mix_OpenAudio(oa_freq, oa_format, 2, 2048) < 0)
+			RUNTIME_ERROR("Mix: %s", ::Mix_GetError());
+	}
+	
+	~scoped_mix() noexcept {
+		::Mix_Quit();
+	}
+};
+
+} // namespace:meck
 
 #endif
+
 

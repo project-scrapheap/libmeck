@@ -77,6 +77,7 @@
 #include <meck/error.hpp>
 #include <meck/controller.hpp>
 #include <meck/keycode.hpp>
+#include <meck/lib.hpp>
 #include <meck/reactor.hpp>
 #include <meck/renderer.hpp>
 #include <meck/surface.hpp>
@@ -274,6 +275,11 @@ public:
 	}
 	
 protected:
+	scoped_sdl sdl_;
+	scoped_img img_;
+	scoped_ttf ttf_;
+	scoped_mix mix_;
+	
 	window_ptr window_;
 	renderer_ptr renderer_;
 	

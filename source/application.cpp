@@ -70,7 +70,11 @@ application::application(
 	const ::Uint32 img_flags,
 	const boost::program_options::variables_map& opt_vm
 )
-	: loop_(true)
+	: sdl_(sdl_flags)
+	, img_(img_flags)
+	, ttf_()
+	, mix_()
+	, loop_(true)
 	, first_config_(true)
 	, frame_delay_(0)
 	, frame_count_(0)
@@ -81,28 +85,10 @@ application::application(
 	, misc_interval_(timer_, 250)
 	, status_interval_(timer_, 1000)
 {
-	if (::SDL_Init(sdl_flags) < 0)
-		RUNTIME_ERROR("SDL: %s", ::SDL_GetError());
-	
-	if (::IMG_Init(img_flags) < 0)
-		RUNTIME_ERROR("IMG: %s", ::IMG_GetError());
-	
-	if (::TTF_Init() < 0)
-		RUNTIME_ERROR("TTF: %s", ::TTF_GetError());
-	
-	const int oa_freq = MIX_DEFAULT_FREQUENCY;
-	const int oa_format = MIX_DEFAULT_FORMAT;
-	if (::Mix_OpenAudio(oa_freq, oa_format, 2, 2048) < 0)
-		RUNTIME_ERROR("Mix: %s", ::Mix_GetError());
 }
 
 application::~application() noexcept {
 	reset();
-	
-	::Mix_Quit();
-	::TTF_Quit();
-	::IMG_Quit();
-	::SDL_Quit();
 }
 
 void
