@@ -279,5 +279,20 @@ TEST_CASE(
 		);
 	}
 	
+	SECTION("rect offset works") {
+		rect r(1, 2, 3, 4);
+		
+		REQUIRE(r + point(10, 20) == rect(11, 22, 3, 4));
+		REQUIRE(r - point(10, 20) == rect(-9, -18, 3, 4));
+		
+		r += point(10, 20);
+		
+		REQUIRE(r == rect(11, 22, 3, 4));
+		
+		r -= point(20, 40);
+		
+		REQUIRE(r == rect(-9, -18, 3, 4));
+	}
+	
 }
 
