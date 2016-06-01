@@ -7,5 +7,16 @@ script_dir=`dirname "${script_path}"`
 
 cd "${script_dir}/test/"
 
-./test_app
+runtest() {
+	echo "$0: running test \"$1\""
+	eval "./$1"
+}
+
+echo ""
+
+runtest "test_app"
+
+runtest "format"
+runtest "point"
+runtest "rect"
 

@@ -106,3 +106,7 @@ env.Program("test/test_app", [
 	"test/test_app_ui_theme.cpp"
 ])
 
+env.Program("test/format", "test/format.cpp")
+env.Program("test/point", "test/point.cpp")
+env.Program("test/rect", "test/rect.cpp")
+

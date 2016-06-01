@@ -132,7 +132,7 @@ public:
 	{
 	}
 	
-	inline
+	inline explicit
 	rect(
 		const ::SDL_Rect& rhs
 	) noexcept
@@ -241,27 +241,27 @@ public:
 	
 	inline int
 	x2() const noexcept {
-		return x() + w() - 1;
+		return x() + w();
 	}
 	
 	inline rect&
 	x2(
 		const int n
 	) noexcept {
-		w(n - x() + 1);
+		w(n - x());
 		return *this;
 	}
 	
 	inline int 
 	y2() const noexcept {
-		return y() + h() - 1;
+		return y() + h();
 	}
 	
 	inline rect&
 	y2(
 		const int n
 	) noexcept {
-		h(n - y() + 1);
+		h(n - y());
 		return *this;
 	}
 	
@@ -323,7 +323,7 @@ public:
 	intersects(
 		const rect& r
 	) const noexcept {
-#ifndef MECK_RECT_INTERSECTS_SDL2
+#ifndef MECK_RECT_SDL2_INTERSECTS
 		return !(
 			r.x2() < x() ||
 			r.y2() < y() ||
@@ -339,15 +339,19 @@ public:
 	get_intersection(
 		const rect& r
 	) const noexcept {
-#ifndef MECK_RECT_INTERSECTION_SDL2
-		return !intersects(r)?
-			OPT(rect, boost::none):
-			OPT(rect, rect::from_corners(
+#ifndef MECK_RECT_SDL2_INTERSECTION
+		if (intersects(r)) {
+			auto ir = rect::from_corners(
 				std::max(x(), r.x()),
 				std::max(y(), r.y()),
 				std::min(x2(), r.x2()),
 				std::min(y2(), r.y2())
-			));
+			);
+			return ir.w() > 0 && ir.h() > 0?
+				OPT(rect, ir):
+				OPT(rect, boost::none);
+		}
+		return OPT(rect, boost::none);
 #else
 		::SDL_Rect result;
 		return ::SDL_IntersectRect(get(), r.get(), &result) == SDL_FALSE?
@@ -368,10 +372,20 @@ public:
 	u(
 		const rect& r
 	) noexcept {
-		x(std::min(x(), r.x()));
-		y(std::min(y(), r.y()));
-		x2(std::max(x2(), r.x2()));
-		y2(std::max(y2(), r.y2()));
+#ifndef MECK_RECT_SDL2_UNION
+		const int nx = std::min(x(), r.x());
+		const int ny = std::min(y(), r.y());
+		const int nx2 = std::max(x2(), r.x2());
+		const int ny2 = std::max(y2(), r.y2());
+		x(nx);
+		y(ny);
+		x2(nx2);
+		y2(ny2);
+#else
+		::SDL_Rect result;
+		::SDL_UnionRect(get(), r.get(), &result);
+		*this = rect(result);
+#endif
 		return *this;
 	}
 	
