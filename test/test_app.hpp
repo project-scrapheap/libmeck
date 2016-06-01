@@ -238,12 +238,12 @@ protected:
 	meck::ui::block menu_1_block_;
 };
 
-class ui_theme_controller
+class ui_overlay_form_controller
 	: public section_controller
 {
 public:
 	explicit
-	ui_theme_controller(
+	ui_overlay_form_controller(
 		meck::application& app,
 		const meck::controller_ptr& ctrlr
 	);
@@ -323,7 +323,7 @@ public:
 			ADD_CONTROLLER(keycode);
 			ADD_CONTROLLER(renderer);
 			ADD_CONTROLLER(ui_block);
-			ADD_CONTROLLER(ui_theme);
+			ADD_CONTROLLER(ui_overlay_form);
 			
 #undef ADD_CONTROLLER
 		}

@@ -67,7 +67,7 @@
 
 namespace test {
 
-ui_theme_controller::ui_theme_controller(
+ui_overlay_form_controller::ui_overlay_form_controller(
 	meck::application& app,
 	const meck::controller_ptr& ctrlr
 )
@@ -87,7 +87,7 @@ ui_theme_controller::ui_theme_controller(
 	, ok_button_(
 		ui_overlay_,
 		boost::bind(
-			&ui_theme_controller::ok_action,
+			&ui_overlay_form_controller::ok_action,
 			this,
 			_1
 		)
@@ -95,7 +95,7 @@ ui_theme_controller::ui_theme_controller(
 	, cancel_button_(
 		ui_overlay_,
 		boost::bind(
-			&ui_theme_controller::cancel_action,
+			&ui_overlay_form_controller::cancel_action,
 			this,
 			_1
 		)
@@ -178,11 +178,11 @@ ui_theme_controller::ui_theme_controller(
 }
 
 void
-ui_theme_controller::think() {
+ui_overlay_form_controller::think() {
 }
 
 void
-ui_theme_controller::render() {
+ui_overlay_form_controller::render() {
 	ui_overlay_.render();
 	
 	meck::detail::test::compare_renderer_to_file(

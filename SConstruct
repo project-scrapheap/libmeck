@@ -103,7 +103,7 @@ env.Program("test/test_app", [
 	"test/test_app_keycode.cpp",
 	"test/test_app_renderer.cpp",
 	"test/test_app_ui_block.cpp",
-	"test/test_app_ui_theme.cpp"
+	"test/test_app_ui_overlay_form.cpp"
 ])
 
 env.Program("test/format", "test/format.cpp")
