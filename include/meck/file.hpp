@@ -64,6 +64,7 @@
 #ifndef MECK_FILE_HPP
 #define MECK_FILE_HPP
 
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>

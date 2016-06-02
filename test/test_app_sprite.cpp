@@ -61,40 +61,56 @@
  *  3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef MECK_HPP
-#define MECK_HPP
+#include "test_app.hpp"
 
-#include <meck/animation.hpp>
-#include <meck/application.hpp>
-#include <meck/controller.hpp>
-#include <meck/environment.hpp>
-#include <meck/error.hpp>
-#include <meck/file.hpp>
-#include <meck/font.hpp>
-#include <meck/format.hpp>
-#include <meck/keycode.hpp>
-#include <meck/lib.hpp>
-#include <meck/reactor.hpp>
-#include <meck/renderer.hpp>
-#include <meck/sprite.hpp>
-#include <meck/surface.hpp>
-#include <meck/texture.hpp>
-#include <meck/tick.hpp>
-#include <meck/window.hpp>
+#include <meck/detail/test.hpp>
 
-#include <meck/ui/ascii_textbox.hpp>
-#include <meck/ui/block.hpp>
-#include <meck/ui/button.hpp>
-#include <meck/ui/checkbox.hpp>
-#include <meck/ui/container.hpp>
-#include <meck/ui/image.hpp>
-#include <meck/ui/label.hpp>
-#include <meck/ui/overlay.hpp>
-#include <meck/ui/text.hpp>
-#include <meck/ui/theme.hpp>
-#include <meck/ui/utf8_textbox.hpp>
-#include <meck/ui/validator.hpp>
-#include <meck/ui/widget.hpp>
+namespace test {
 
-#endif
+void
+sprite_controller::think() {
+}
+
+void
+sprite_controller::render() {
+	// Background
+	app_.get_renderer().copy(
+		texture_,
+		spritesheet_.at("colored_grass"),
+		meck::rect(0, 0, 800, 600)
+	);
+	
+	// Ground
+	app_.get_renderer().fill_copy(
+		texture_,
+		spritesheet_.at("grassMid"),
+		meck::rect(0, 472, 800, 128)
+	);
+	
+	// Player
+	auto player_src = spritesheet_.at("alienGreen_walk1");
+	app_.get_renderer().copy(
+		texture_,
+		player_src,
+		meck::rect(100, 280, player_src.w(), player_src.h())
+	);
+	
+	// Enemy
+	auto enemy_src = spritesheet_.at("bee");
+	app_.get_renderer().copy(
+		texture_,
+		enemy_src,
+		meck::rect(375, 285, enemy_src.w(), enemy_src.h())
+	);
+	
+	meck::detail::test::compare_renderer_to_file(
+		app_,
+		"test_app-data/sprite-0.bmp",
+		"test_app-data/sprite-0-screenshot.bmp"
+	);
+	
+	next_controller();
+}
+
+} // namespace:test
 

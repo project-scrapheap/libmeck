@@ -65,6 +65,7 @@ env.Append(LIBS=[
 ])
 
 env.StaticLibrary("meck", [
+	"source/animation.cpp",
 	"source/application.cpp",
 	"source/controller.cpp",
 	"source/font.cpp",
@@ -73,6 +74,7 @@ env.StaticLibrary("meck", [
 	"source/rect.cpp",
 	"source/renderer.cpp",
 	"source/screenshot.cpp",
+	"source/sprite.cpp",
 	"source/surface.cpp",
 	"source/texture.cpp",
 	"source/typeid.cpp",
@@ -102,6 +104,7 @@ env.Program("test/test_app", [
 	"test/test_app_font.cpp",
 	"test/test_app_keycode.cpp",
 	"test/test_app_renderer.cpp",
+	"test/test_app_sprite.cpp",
 	"test/test_app_ui_block.cpp",
 	"test/test_app_ui_overlay_form.cpp"
 ])

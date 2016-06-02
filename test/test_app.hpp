@@ -211,6 +211,36 @@ protected:
 	meck::texture qmark_image_;
 };
 
+class sprite_controller
+	: public section_controller
+{
+public:
+	explicit
+	sprite_controller(
+		meck::application& app,
+		const meck::controller_ptr& ctrlr
+	)
+		: section_controller(app, ctrlr)
+		, texture_(
+			app.get_renderer(),
+			"resource/img/kenney-nl-platformer-selected.png"
+		)
+		, spritesheet_(meck::spritesheet_from_ssp_file(
+			"resource/img/kenney-nl-platformer-selected.sheet"
+		))
+	{}
+	
+	virtual void
+	think();
+	
+	virtual void
+	render();
+	
+protected:
+	meck::texture texture_;
+	meck::spritesheet spritesheet_;
+};
+
 class ui_block_controller
 	: public section_controller
 {
@@ -322,6 +352,7 @@ public:
 			ADD_CONTROLLER(font);
 			ADD_CONTROLLER(keycode);
 			ADD_CONTROLLER(renderer);
+			ADD_CONTROLLER(sprite);
 			ADD_CONTROLLER(ui_block);
 			ADD_CONTROLLER(ui_overlay_form);
 			

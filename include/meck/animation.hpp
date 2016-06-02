@@ -61,40 +61,17 @@
  *  3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef MECK_HPP
-#define MECK_HPP
+#ifndef MECK_ANIMATION_HPP
+#define MECK_ANIMATION_HPP
 
-#include <meck/animation.hpp>
-#include <meck/application.hpp>
-#include <meck/controller.hpp>
-#include <meck/environment.hpp>
 #include <meck/error.hpp>
-#include <meck/file.hpp>
-#include <meck/font.hpp>
-#include <meck/format.hpp>
-#include <meck/keycode.hpp>
-#include <meck/lib.hpp>
-#include <meck/reactor.hpp>
-#include <meck/renderer.hpp>
 #include <meck/sprite.hpp>
-#include <meck/surface.hpp>
-#include <meck/texture.hpp>
-#include <meck/tick.hpp>
-#include <meck/window.hpp>
 
-#include <meck/ui/ascii_textbox.hpp>
-#include <meck/ui/block.hpp>
-#include <meck/ui/button.hpp>
-#include <meck/ui/checkbox.hpp>
-#include <meck/ui/container.hpp>
-#include <meck/ui/image.hpp>
-#include <meck/ui/label.hpp>
-#include <meck/ui/overlay.hpp>
-#include <meck/ui/text.hpp>
-#include <meck/ui/theme.hpp>
-#include <meck/ui/utf8_textbox.hpp>
-#include <meck/ui/validator.hpp>
-#include <meck/ui/widget.hpp>
+#include <SDL.h>
+
+namespace meck {
+
+} // namespace:meck
 
 #endif
 

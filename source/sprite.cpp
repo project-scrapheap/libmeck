@@ -61,40 +61,54 @@
  *  3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef MECK_HPP
-#define MECK_HPP
-
-#include <meck/animation.hpp>
-#include <meck/application.hpp>
-#include <meck/controller.hpp>
-#include <meck/environment.hpp>
-#include <meck/error.hpp>
-#include <meck/file.hpp>
-#include <meck/font.hpp>
-#include <meck/format.hpp>
-#include <meck/keycode.hpp>
-#include <meck/lib.hpp>
-#include <meck/reactor.hpp>
-#include <meck/renderer.hpp>
 #include <meck/sprite.hpp>
-#include <meck/surface.hpp>
-#include <meck/texture.hpp>
-#include <meck/tick.hpp>
-#include <meck/window.hpp>
 
-#include <meck/ui/ascii_textbox.hpp>
-#include <meck/ui/block.hpp>
-#include <meck/ui/button.hpp>
-#include <meck/ui/checkbox.hpp>
-#include <meck/ui/container.hpp>
-#include <meck/ui/image.hpp>
-#include <meck/ui/label.hpp>
-#include <meck/ui/overlay.hpp>
-#include <meck/ui/text.hpp>
-#include <meck/ui/theme.hpp>
-#include <meck/ui/utf8_textbox.hpp>
-#include <meck/ui/validator.hpp>
-#include <meck/ui/widget.hpp>
+namespace meck {
 
-#endif
+spritesheet
+spritesheet_from_ssp_file(
+	const boost::filesystem::path& sheet_path
+) {
+	using boost::cmatch;
+	using boost::regex;
+	using boost::regex_match;
+	
+	string_vector lines(read_file(sheet_path));
+	
+	spritesheet sprites;
+	regex expression(
+		"\\s?([-_0-9a-z]+)"
+		"\\s?="
+		"\\s?(\\d+)"
+		"\\s+(\\d+)"          
+		"\\s+(\\d+)"
+		"\\s+(\\d+)",
+		regex::extended | regex::icase
+	);
+	
+	int n = 1;
+	
+	for (auto line : lines) {
+		cmatch what;
+		if (regex_match(line.c_str(), what, expression)) {
+			sprites.insert(std::make_pair(
+				what[1],
+				rect(
+					std::stoi(what[2]),
+					std::stoi(what[3]),
+					std::stoi(what[4]),
+					std::stoi(what[5])
+				)
+			));
+		} else if (!line.empty()) {
+			RUNTIME_ERROR("failed to process sprite sheet line"
+				" #%1%: \"%2%\"", n, line);
+		}
+		n++;
+	}
+	
+	return sprites;
+}
+
+} // namespace:meck
 
